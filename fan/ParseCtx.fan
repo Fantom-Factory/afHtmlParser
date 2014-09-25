@@ -68,7 +68,7 @@ internal class ParseCtx {
 	}
 	
 	Void pushAttr() {
-		attrElem.addAttr(attrName, attrValue)
+		attrElem.addAttr(attrName, attrValue ?: Str.defVal)
 		attrName = null
 		attrValue = null
 	}

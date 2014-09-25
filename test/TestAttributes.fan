@@ -37,6 +37,9 @@ internal class TestAttributes : HtmlParserTest {
 		elem = parser.parseDoc("<div type='submit'></div>")
 		verifyElemEq(elem, "<div type='submit' />")
 
+		elem = parser.parseDoc("<div class=''></div>")
+		verifyElemEq(elem, "<div class='' />")
+
 		elem = parser.parseDoc("<div type  =  'submit' />")
 		verifyElemEq(elem, "<div type='submit' />")
 
@@ -47,6 +50,9 @@ internal class TestAttributes : HtmlParserTest {
 	Void testDoubleQuotedAttributes() {
 		elem = parser.parseDoc("<div type=\"submit\"></div>")
 		verifyElemEq(elem, "<div type='submit' />")
+
+		elem = parser.parseDoc("<div class=\"\"></div>")
+		verifyElemEq(elem, "<div class='' />")
 
 		elem = parser.parseDoc("<div type  =  \"submit\" />")
 		verifyElemEq(elem, "<div type='submit' />")

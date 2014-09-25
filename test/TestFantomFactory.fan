@@ -2,12 +2,13 @@
 internal class TestFantomFactory : HtmlParserTest {
 	
 	Void testFfWebSite() {
-//		PegCtx#.pod.log.level = LogLevel.debug
+		afPegger::Parser#.pod.log.level = LogLevel.debug
 
-		HtmlParser().parseDoc(website)
+//		HtmlParser().parseDoc(fantomFactory)
+		HtmlParser().parseDoc(dekxaPromo)
 	}
 	
-	Str website := 
+	Str fantomFactory := 
 """<!DOCTYPE html><html prefix="og: http://ogp.me/ns#" xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg"><head><title>Home :: Fantom-Factory</title><meta id="viewport" name="viewport" content="initial-scale=1.0"><link rel="alternate" type="application/atom+xml" title="Fantom Factory" href="/feeds/all"><link href="https://plus.google.com/+FantomFactoryOrgy" rel="publisher"><link rel="shortcut icon" href="/favicon.ico"><link rel="apple-touch-icon" sizes="57x57"   href="/favicons/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60"   href="/favicons/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72"   href="/favicons/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76"   href="/favicons/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/favicons/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/favicons/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/favicons/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-touch-icon-152x152.png"><link rel="icon" type="image/png" href="/favicons/favicon-16x16.png"   sizes="16x16"><link rel="icon" type="image/png" href="/favicons/favicon-32x32.png"   sizes="32x32"><link rel="icon" type="image/png" href="/favicons/favicon-96x96.png"   sizes="96x96"><link rel="icon" type="image/png" href="/favicons/favicon-160x160.png" sizes="160x160"><link rel="icon" type="image/png" href="/favicons/favicon-196x196.png" sizes="196x196"><meta name="application-name"			content="Fantom-Factory"><meta name="apple-mobile-web-app-title"	content="Fantom-Factory"><meta name="msapplication-TileColor"	content="#00A300"><meta name="msapplication-TileImage"	content="/favicons/mstile-144x144.png"><meta name="msapplication-config"		content="/favicons/browserconfig.xml"><script type="text/javascript">
    	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
    	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -143,4 +144,45 @@ internal class TestFantomFactory : HtmlParserTest {
    });</script>
    </body></html>"""
 	
+   Str dekxaPromo :=
+"""<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Assisting Schools :: Dekxa</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="Description" content="Education is not a one size fits all, yet a highly personalised model is not financially viable, so how can we design one that maximises the later while minimising the former?" />
+   <link rel="stylesheet" type="text/css" href="/coldFeet/UC9Hug==/css/bootstrap.min.css" />
+   <link rel="stylesheet" type="text/css" href="/coldFeet/KoDYOA==/css/font-awesome.min.css" />
+   <link rel="stylesheet" type="text/css" href="/coldFeet/QT1Kcg==/css/website.min.css" />
+   <link rel="stylesheet" type="text/css" href="/coldFeet/-lWgcg==/css/bootstrap-datepicker.min.css" />
+   </head><body><nav class="navbar navbar-default navbar-fixed-top"><div class="container"><div class="navbar-header"><button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/"><img class="dekxaLogo" src="/coldFeet/F8UgWQ==/images/dekxaLogo.png"><img class="dekxaWord" src="/coldFeet/rE3ynA==/images/dekxaWord.png"></a></div><div id="navbar-collapse" class="collapse navbar-collapse"><p class="navbar-text hidden-xs hidden-sm">Learning Analytics at your fingertips</p><form id="dekxaLogin" class="navbar-form navbar-right" method="POST" action="http://dekxa.herokuapp.com/index.loginForm"><input type="hidden" name="t:formdata" value="wWppP5bJ0U+wqU5CMEWXMHyOG5E=:H4sIAAAAAAAAAJWQMUsDMRiGvx5UClWRqoO4OOh6Xeyii0WQFooIh4tbLvm8RnJJTFJ7Lk6Cv8HFXyBOCu4d3PwP/gAXBycHc1cOlEOhU+Dl/XievPfvUB+vQKsvGWY7mBIuCGMGrbUGOsokIdGEDjF0RKN15rITUmVQ8DiMicWwG/uQUHfAUbDNCN1Ibx1Pmm+rL18B1AbQpEo6o8QhSdFBa3BGLkhbEJm0I2e4THYz7WC+4Han3D9turPaHBlF/Wk0ilNuLVdy8sC2Tz/vXgOATI+XYHHK0cRTlWH2HK4AHDTKoFrJGz/2KuMhsUNvuPevIVWpVhKls2GPM4ayKnhys7GcrT/PVabLubViqhLZ88jxAjSnIkIlXM5iUDBd1eA2+lh7erzeDyAYQIMK7tv94tu5EQpMffDLqF6wy/cbFVrcoFACAAA="><div class="form-group"><input class="form-control" name="emailAddress" type="email" required="required" maxlength="100" placeholder="Enter email address"></div><div class="form-group"><input id="dekxaLoginPassword" class="form-control" type="password" required="required" maxlength="100" placeholder="Enter password"></div><input id="dekxaLoginPasswordHash" name="passwordHash" type="hidden"><input name="password" type="hidden" value="Required!"><button class="btn btn-default" type="submit" title="Login to Dekxa"><i class="fa fa-play"></i></button></form></div></div></nav><section class="container"><div class="row mainPage"><nav class="hidden-xs hidden-sm col-md-3 col-lg-2 sideMenu" role="navigation"><ul class="list-unstyled"><li><a class="" href="/">Home</a></li><li><a class="" href="/learninganalytics">Learning Analytics</a></li><li><a class="" href="/empoweringstudents">Empowering Students</a></li><li><a class="" href="/helpingteachers">Helping Teachers</a></li><li><a class="" href="/improvingeducation">Improving Education</a></li><li><a class="active" href="/assistingschools">Assisting Schools</a></li></ul><ul class="list-unstyled"><li><a class="" href="/features">Features</a></li></ul><ul class="list-unstyled"><li><a class="" href="/company">Company</a></li><li><a class="" href="/ourteam">Our Team</a></li><li><a class="" href="/jobs">Jobs</a></li><li><a class="" href="/press">Press</a></li></ul><ul class="list-unstyled"><li><a class="" href="/join">Join</a></li></ul><ul class="list-unstyled"><li><a class="" href="/contactus">Contact Us</a></li></ul></nav><div id="page" class="col-md-9 col-lg-10 mainBody"><div class="page-header"><h1>Assisting Schools</h1></div><div class="row"><div class="col-lg-12"><img class="img-responsive" src="/coldFeet/XF6j7Q==/images/assistingSchools.jpg"></div></div><div class="row"><div class="col-xs-12"><p class="lead">Schools have the difficult task of having to group students into classes and match them with teachers. Although they have analytic information about student performance they lack the necessary information about students as learners. </p><p>In other words, the school knows two students are straight A students, but they do not know that one learns better at a higher pace as opposed to the other. Yet how a student learns is just as important, if not more, than how a student performs. </p><p>Learning analytics provided schools with this valuable insight into who these students are as learners, thus helping them better prepare the learning environment in which the students will journey. </p><p>For instance, if a school knows that a group of students learn better with a faster paced class, then they may group them together and inform the teacher so they may adapt to the particular group they are teaching. </p><p>Hence, schools can make more informed decisions when grouping students and assigning teachers.</p></div></div></div></div><footer class="fatFooter hidden-print"><div class="row"><div class="quote">Facts do not cease to exist because they are ignored - Aldous Huxley</div></div><nav class="row" role="navigation"><div class="col-xs-6 col-sm-3 col-lg-2"><ul class="list-unstyled"><li><a href="/">Dekxa</a></li><li><a class="" href="/learninganalytics">Learning Analytics</a></li><li><a class="" href="/empoweringstudents">Empowering Students</a></li><li><a class="" href="/helpingteachers">Helping Teachers</a></li><li><a class="" href="/improvingeducation">Improving Education</a></li><li><a class="active" href="/assistingschools">Assisting Schools</a></li></ul></div><div class="col-xs-6 col-sm-2 col-lg-1"><ul class="list-unstyled"><li><a class="" href="/company">Company</a></li><li><a class="" href="/ourteam">Our Team</a></li><li><a class="" href="/jobs">Jobs</a></li><li><a class="" href="/press">Press</a></li></ul></div><div class="col-xs-6 col-sm-2"><ul class="list-unstyled"><li><a class="" href="/contactus">Contact Us</a></li></ul></div></nav><div class="row"><div class="copyright">&#169; DEKXA Pte. Ltd. All right reserved. 2013 - 2014</div></div></footer></section><script type="text/javascript">\$('.input-group.date').datepicker({
+   	format: "d M yyyy",
+   	endDate: "25 Sep 2014",
+   	startView: 2,
+   	multidate: false,
+   	autoclose: true
+   });</script>
+   <script type="text/javascript" src="/scripts/require-2.1.14.js"></script>
+   <script type="text/javascript">requirejs.config({"baseUrl":"/modules/",
+   "waitSeconds":15,
+   "xhtml":true,
+   "skipDataMain":true,
+   "paths":{"jquery":["//code.jquery.com/jquery-2.1.1.min","/scripts/jquery-2.1.1.min"],
+   "bootstrap":"/scripts/bootstrap.min",
+   "bsDatepicker":"/scripts/bootstrap-datepicker",
+   "cryptoJs":"/scripts/cryptoJs.min",
+   "hashPassword":"/coldFeet/pzjOsw==/modules/hashPassword",
+   "countdown":"/coldFeet/c8Qg3Q==/modules/countdown",
+   "sys":"/coldFeet/Gunpww==/pods/sys/sys",
+   "util":"/coldFeet/1JDHoA==/pods/util/util",
+   "concurrent":"/coldFeet/-m7a-A==/pods/concurrent/concurrent",
+   "afBeanUtils":"/coldFeet/_t7oiw==/pods/afBeanUtils/afBeanUtils",
+   "afDuvet":"/coldFeet/JGMYeg==/pods/afDuvet/afDuvet"},
+   "shim":{"bootstrap":["jquery"],
+   "bsDatepicker":["jquery","bootstrap"],
+   "cryptoJs":{"exports":"CryptoJS"},
+   "util":["sys","concurrent"],
+   "concurrent":["sys"],
+   "afBeanUtils":["sys"],
+   "afDuvet":["sys","util"]}});</script>
+   <script type="text/javascript">require(["hashPassword"], function (module) {
+   module("dekxaLogin", "dekxaLoginPassword", "dekxaLoginPasswordHash");
+   });</script>
+   </body></html>"""
 }
