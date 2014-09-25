@@ -24,6 +24,8 @@ Other:
  - CData Sections: '<![CDATA[ cdata ]]>'
  - Numerical character references: '&#160;' and '&#xA0;'
 
+> "Html Parser" because only *Chuck Norris* can parse HTML with regular expressions.
+
 
 
 Install [#Install]
@@ -50,6 +52,7 @@ pre>
 class Example {
     Void main() {
         elem := HtmlParser().parseDoc("<input disabled value=wotever>")
+        
         echo(elem.writeToStr)   // --> <input disabled='disabled' value='wotever'/>
     }
 }
@@ -65,7 +68,7 @@ While 'Html Parser' is more lenient than a validator it does *NOT* attempt to re
 
 It's main purpose is to parse HTML5 documents created with [Slim]`pod:afSlim` into XML so they may be tested by [Bounce]`pod:afBounce` and [Sizzle]`pod:afSizzle`.
 
-'Html Parser' was created with [Pegger]`pod:afPegger`.
+'Html Parser' uses [Pegger]`pod:afPegger` because [HTML can not be parsed with regular expressions]`http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454`.
 
 
 

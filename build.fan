@@ -5,6 +5,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afHtmlParser"
 		summary = "Parses HTML strings into XML documents"
+		summary = "Because only Chuck Norris can parse HTML with regular expressions"
 		version = Version("0.0.2")
 
 		meta = [
@@ -16,7 +17,7 @@ class Build : BuildPod {
 
 		depends = [
 			"sys 1.0",
-			"concurrent 1.0",
+			"concurrent 1.0",	// TODO: remove dependency on concurrent
 
 			// ---- Core ------------------------
 			"afPegger 0+",
