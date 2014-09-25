@@ -6,30 +6,30 @@ internal class TestDoctype : HtmlParserTest {
 	HtmlParser 	parser := HtmlParser()
 	
 	Void testStandardDoctype() {
-		docType = parser.parseDocument("<div />").docType
+		docType = parser.parseDoc("<div />").doc.docType
 		verifyEq(docType, null)
 
-		docType = parser.parseDocument("<!DOCTYPE hTmL> <html/>").docType
+		docType = parser.parseDoc("<!DOCTYPE hTmL> <html/>").doc.docType
 		verifyEq(docType.rootElem, "hTmL")
 		verifyEq(docType.publicId, null)
 		verifyEq(docType.systemId, null)
 
-		docType = parser.parseDocument("<!DOCTYPE html SYSTEM \"about:legacy-compat\"> <html/>").docType
+		docType = parser.parseDoc("<!DOCTYPE html SYSTEM \"about:legacy-compat\"> <html/>").doc.docType
 		verifyEq(docType.rootElem, "html")
 		verifyEq(docType.publicId, null)
 		verifyEq(docType.systemId, `about:legacy-compat`)
 
-		docType = parser.parseDocument("<!DOCTYPE html SYSTEM 'about:legacy-compat'> <html/>").docType
+		docType = parser.parseDoc("<!DOCTYPE html SYSTEM 'about:legacy-compat'> <html/>").doc.docType
 		verifyEq(docType.rootElem, "html")
 		verifyEq(docType.publicId, null)
 		verifyEq(docType.systemId, `about:legacy-compat`)
 
-		docType = parser.parseDocument("<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.0//EN'> <html/>").docType
+		docType = parser.parseDoc("<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.0//EN'> <html/>").doc.docType
 		verifyEq(docType.rootElem, "html")
 		verifyEq(docType.publicId, "-//W3C//DTD HTML 4.0//EN")
 		verifyEq(docType.systemId, null)
 
-		docType = parser.parseDocument("<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' SYSTEM 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'> <html/>").docType
+		docType = parser.parseDoc("<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' SYSTEM 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'> <html/>").doc.docType
 		verifyEq(docType.rootElem, "html")
 		verifyEq(docType.publicId, "-//W3C//DTD XHTML 1.0 Strict//EN")
 		verifyEq(docType.systemId, `http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd`)

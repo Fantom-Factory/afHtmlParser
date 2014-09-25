@@ -5,10 +5,11 @@ class Build : BuildPod {
 	new make() {
 		podName = "afHtmlParser"
 		summary = "Parses HTML strings into XML documents"
-		version = Version("0.0.1")
+		version = Version("0.0.2")
 
 		meta = [
 			"proj.name"		: "HTML Parser",
+			"internal"		: "true",
 			"tags"			: "web",
 			"repo.private"	: "true"
 		]

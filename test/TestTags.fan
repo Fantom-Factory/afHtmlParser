@@ -6,70 +6,70 @@ internal class TestTags : HtmlParserTest {
 	HtmlParser parser := HtmlParser()
 
 	Void testValidSimpleTag() {
-		elem := parser.parseDocument("<html></html>").root
+		elem := parser.parseDoc("<html></html>")
 		verifyEq(elem.name, "html")
 		verifyEq(elem.attrs.size, 0)
 		verifyEq(elem.children.size, 0)
 
-		elem = parser.parseDocument("<html  ></html>").root
+		elem = parser.parseDoc("<html  ></html>")
 		verifyEq(elem.name, "html")
 		verifyEq(elem.attrs.size, 0)
 		verifyEq(elem.children.size, 0)
 
-		elem = parser.parseDocument("<html/>").root
+		elem = parser.parseDoc("<html/>")
 		verifyEq(elem.name, "html")
 		verifyEq(elem.attrs.size, 0)
 		verifyEq(elem.children.size, 0)
 
-		elem = parser.parseDocument("<html  />").root
+		elem = parser.parseDoc("<html  />")
 		verifyEq(elem.name, "html")
 		verifyEq(elem.attrs.size, 0)
 		verifyEq(elem.children.size, 0)
 	}
 
 	Void testValidNestedTag() {
-		elem := parser.parseDocument("<html><head></head></html>").root
+		elem := parser.parseDoc("<html><head></head></html>")
 		verifyElemEq(elem, "<html><head/></html>")
 		
-		elem = parser.parseDocument("<html><head  ></head></html>").root
+		elem = parser.parseDoc("<html><head  ></head></html>")
 		verifyElemEq(elem, "<html><head/></html>")
 		
-		elem = parser.parseDocument("<html><head/></html>").root
+		elem = parser.parseDoc("<html><head/></html>")
 		verifyElemEq(elem, "<html><head/></html>")
 		
-		elem = parser.parseDocument("<html><head  /></html>").root
+		elem = parser.parseDoc("<html><head  /></html>")
 		verifyElemEq(elem, "<html><head/></html>")
 	}
 
 	Void testValidSiblingTags() {
-		elem := parser.parseDocument("<html><head/><body/></html>").root
+		elem := parser.parseDoc("<html><head/><body/></html>")
 		verifyElemEq(elem, "<html><head/><body/></html>")
 		
-		elem = parser.parseDocument("<html><head><title/></head></html>").root
+		elem = parser.parseDoc("<html><head><title/></head></html>")
 		verifyElemEq(elem, "<html><head><title/></head></html>")
 		
-		elem = parser.parseDocument("<html><head/><body><div/></body></html>").root
+		elem = parser.parseDoc("<html><head/><body><div/></body></html>")
 		verifyElemEq(elem, "<html><head/><body><div/></body></html>")
 	}
 
 	Void testVoidTags() {
-		elem := parser.parseDocument("<area>").root
+		elem := parser.parseDoc("<area>")
 		verifyElemEq(elem, "<area/>")
 		
-		elem = parser.parseDocument("<html><meta  ><img  ></html>").root
+		elem = parser.parseDoc("<html><meta  ><img  ></html>")
 		verifyElemEq(elem, "<html><meta/><img/></html>")
 	}
 
 	Void testRawTextTags() {
-		elem := parser.parseDocument("<script></script>").root
+		elem := parser.parseDoc("<script></script>")
 		verifyElemEq(elem, "<script/>")
 		
-		elem = parser.parseDocument("<style></style>").root
+		elem = parser.parseDoc("<style></style>")
 		verifyElemEq(elem, "<style/>")
 	}
 
 	Void testEscapableRawTextTags() {
-		elem := parser.parseDocument("<textarea></textarea>").root
+		elem := parser.parseDoc("<textarea></textarea>")
 		verifyElemEq(elem, "<textarea/>")
 	}
 }
