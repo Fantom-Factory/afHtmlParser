@@ -2,13 +2,14 @@ using xml
 using afPegger
 using concurrent
 
+** Parses HTML strings into XML documents.
 class HtmlParser {
 	private Rule htmlRules := HtmlRules().rootRule
 	
-	XDoc parseDocument(Str html) {		
+	** Parses the given HTML string into an XML document.
+	XElem parseDoc(Str html) {		
 		parser := Parser(htmlRules)
 		
-		// TODO: parse multiple root elements, combine into 1 xml doc
 		ctx := ParseCtx()
 
 		Actor.locals["afHtmlParser.ctx"] = ctx
@@ -18,12 +19,11 @@ class HtmlParser {
 		if (res == null)
 			throw ParseErr("Could not parse HTML: \n${html.toCode(null)}")
 		
-		return ctx.document
+		return ctx.document.root
 	}
 
-	XElem parseFragment(Str html, XElem? context) {
-		// see 8.4
-		XElem("dude")
-	}
-
+	// TODO: parse multiple root elements
+//	XElem[] parseFrag(Str html) {
+//		// see 8.4
+//	}
 }
