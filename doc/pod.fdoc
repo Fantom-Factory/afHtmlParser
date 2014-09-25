@@ -1,0 +1,102 @@
+Overview [#overview]
+********************
+*@{project.name} is a support library that aids Alien-Factory in the development of other libraries, frameworks and applications.
+Though you are welcome to use it, you may find features are missing and the documentation incomplete.*
+
+A valiant effort to parse HTML5 documents into XML.
+
+'HtmlParser' currently recognises and supports:
+
+Elements:
+ - Normal elements: '<div></div>'
+ - Void elements: '<br>'
+ - Self closing elements: '<foreignElement />'
+ - Raw text elements: '<script> ... </script>'
+ - Escapable raw text elements: '<textarea> ... </textarea>'
+
+Attributes:
+ - Empty attributes: '<input disabled>'
+ - Unquoted attributes: '<input type=submit>'
+ - Single quoted attributes: '<input type='submit'>'
+ - Double quoted attributes: '<input type="submit">'
+
+Other:
+ - Comments: '<!-- comment -->'
+ - CData Sections: '<![CDATA[ cdata ]]>'
+ - Numerical character references: '&#160;' and '&#xA0;'
+
+doctype
+
+Created so HTML documents created with [Slim]`pod:afSlim` may be parsed and tested by [Bounce]`pod:afBounce`.
+
+
+While this should work with the majority of HTML documents, it's main focus is on parsing valid HTML5 documents. 
+So while it may be lenient and allow self closing tags anywhere in the document (and not just in foreign elements),
+you'll find things like character references and CDATA sections are not recognised in script and style elements.
+
+Note that this is a parser and *NOT* a HTML5 validator so is considerably more lenient 
+
+It also does *NOT* attempt to reconstruct documents from the tag soup of badly formatted HTML4 documents.
+
+If your HTML is pretty good - 
+
+the main things it strives to overcome is Void tags and valueless attributes.
+
+
+http://www.w3.org/html/wg/drafts/html/CR/syntax.html
+
+
+Debug for trace:
+
+[18:34:55 23-Sep-14] [debug] [afPegger] [  1] --> element - Processing... (voidElement / selfClosingElement / normalElement)
+[18:34:55 23-Sep-14] [debug] [afPegger] [  2]  --> voidElement - Processing... "<" voidElementName attributes ">"
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]   --> voidElementName - Processing... ("area" [ ]* / "base" [ ]* / "br" [ ]* / "col" [ ]* / "embed" [ ]* / "hr" [ ]* / "img" [ ]* / "input" [ ]* / "keygen" [ ]* / "link" [ ]* / "meta" [ ]* / "param" [ ]* / "source" [ ]* / "track" [ ]* / "wbr" [ ]*)
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]     > voidElementName - Failed. Rolling back.
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]   <-- voidElementName - Processed. [002ms]
+[18:34:55 23-Sep-14] [debug] [afPegger] [  2]    > voidElement - Did not match voidElementName
+[18:34:55 23-Sep-14] [debug] [afPegger] [  2]    > voidElement - Failed. Rolling back.
+[18:34:55 23-Sep-14] [debug] [afPegger] [  2]  <-- voidElement - Processed. [003ms]
+[18:34:55 23-Sep-14] [debug] [afPegger] [  2]  --> selfClosingElement - Processing... "<" tagName attributes "/>"
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]   --> tagName - Processing... [a-zA-Z] (![\t\n\f />] .)* [ ]*
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]     > tagName - Passed!
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]     > tagName - Matched "html"
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]   <-- tagName - Processed. [000ms]
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]   --> attributes - Processing... -!TODO!-
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]     > attributes - Passed!
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]     > attributes - Matched ""
+[18:34:55 23-Sep-14] [debug] [afPegger] [  3]   <-- attributes - Processed. [000ms]
+
+
+
+Install [#Install]
+******************
+Install '@{project.name}' with the Fantom Repository Manager ( [fanr]`docFanr::Tool.install` ):
+
+  C:\> fanr install -r http://repo.status302.com/fanr/ @{pod.name}
+
+To use in a [Fantom]`http://fantom.org/` project, add a dependency to 'build.fan':
+
+  depends = ["sys 1.0", ..., "@{pod.name} @{pod.version}+"]
+
+
+
+Documentation [#documentation]
+******************************
+Full API & fandocs are available on the [Status302 repository]`http://repo.status302.com/doc/@{pod.name}/`.
+
+
+
+Quick Start [#quickStart]
+*************************
+pre>
+  Example here
+<pre
+
+
+
+Release Notes [#releaseNotes]
+*****************************
+
+v0.0.2 [#v0.0.2]
+----------------
+ - New: Preview release.
