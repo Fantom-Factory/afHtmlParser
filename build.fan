@@ -6,13 +6,13 @@ class Build : BuildPod {
 		podName = "afHtmlParser"
 		summary = "Parses HTML strings into XML documents"
 		summary = "Because only Chuck Norris can parse HTML with regular expressions"
-		version = Version("0.0.2")
+		version = Version("0.0.3")
 
 		meta = [
 			"proj.name"		: "HTML Parser",
 			"internal"		: "true",
 			"tags"			: "web",
-			"repo.private"	: "false"
+			"repo.private"	: "true"
 		]
 
 		depends = [
