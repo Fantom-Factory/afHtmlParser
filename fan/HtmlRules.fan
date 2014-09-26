@@ -46,6 +46,7 @@ internal class HtmlRules : Rules {
 		characterReference				:= rules["characterReference"]
 		decNumCharRef					:= rules["decNumCharRef"]
 		hexNumCharRef					:= rules["hexNumCharRef"]
+		namedCharRef					:= rules["namedCharRef"]
 		
 		cdata							:= rules["cdata"]
 		
@@ -62,19 +63,19 @@ internal class HtmlRules : Rules {
 		rules["bom"]							= optional(str("\uFEFF"))
 		rules["xml"]							= optional(sequence([str("<?xml"), strNot("?>") ,str("?>")]))
 		
-		rules["element"]						= firstOf([voidElement, rawTextElement, escapableRawTextElement, normalElement, selfClosingElement])
+		rules["element"]						= firstOf([voidElement, rawTextElement, escapableRawTextElement, selfClosingElement, normalElement])
 
-		rules["voidElement"]					= sequence([char('<'), voidElementName, attributes, char('>')])					.withAction { ctx.pushVoidTag }
+		rules["voidElement"]					= sequence([char('<'), voidElementName, attributes, char('>')])				.withAction { ctx.pushVoidTag }
 		rules["rawTextElement"]					= sequence([rawTextElementTag, rawTextElementContent, endTag])
 		rules["escapableRawTextElement"]		= sequence([escapableRawTextElementTag, escapableRawTextElementContent, endTag])
-		rules["selfClosingElement"]				= sequence([char('<'), tagName, attributes, str("/>")])								.withAction { ctx.pushVoidTag }
+		rules["selfClosingElement"]				= sequence([char('<'), tagName, attributes, str("/>")])						.withAction { ctx.pushVoidTag }
 		rules["normalElement"]					= sequence([startTag, optional(normalElementContent), endTag])
 
-		rules["rawTextElementTag"]				= sequence([char('<'), rawTextElementName, attributes, char('>')])					.withAction { ctx.pushStartTag }
-		rules["escapableRawTextElementTag"]		= sequence([char('<'), escapableRawTextElementName, attributes, char('>')])			.withAction { ctx.pushStartTag }
+		rules["rawTextElementTag"]				= sequence([char('<'), rawTextElementName, attributes, char('>')])			.withAction { ctx.pushStartTag }
+		rules["escapableRawTextElementTag"]		= sequence([char('<'), escapableRawTextElementName, attributes, char('>')])	.withAction { ctx.pushStartTag }
 
-		rules["startTag"]						= sequence([char('<'), tagName, attributes, char('>')])								.withAction { ctx.pushStartTag }
-		rules["endTag"]							= sequence([str("</"), tagName, char('>')])											.withAction { ctx.pushEndTag }
+		rules["startTag"]						= sequence([char('<'), tagName, attributes, char('>')])						.withAction { ctx.pushStartTag }
+		rules["endTag"]							= sequence([str("</"), tagName, char('>')])									.withAction { ctx.pushEndTag }
 
 		rules["tagName"]						= tagNameRule(sequence([anyAlphaChar, zeroOrMore(anyCharNotOf("\t\n\f />".chars))]))
 
@@ -83,13 +84,12 @@ internal class HtmlRules : Rules {
 		rules["escapableRawTextElementName"]	= firstOf("textarea title"																.split.map { tagNameRule(str(it)) })
 
 		rules["rawTextElementContent"]			= rawText
-		rules["escapableRawTextElementContent"]	= zeroOrMore(firstOf([characterReference, escapableRawText]))
-		rules["normalElementContent"]			= sequence([onlyIfNot(str("</")), zeroOrMore(firstOf([characterReference, comment, cdata, normalElementText, element]))])
+		rules["escapableRawTextElementContent"]	= zeroOrMore(firstOf([escapableRawText, characterReference]))
+		rules["normalElementContent"]			= sequence([onlyIfNot(str("</")), zeroOrMore(firstOf([normalElementText, characterReference, comment, cdata, element]))])
 		
-		rules["rawText"]						= oneOrMore(sequence([onlyIfNot(firstOf("script style"  .split.map { str("</${it}>") })), anyChar]))	.withAction { ctx.pushText(it) }
-		rules["escapableRawText"]				= oneOrMore(sequence([onlyIfNot(firstOf("textarea title".split.map { str("</${it}>") })), anyChar]))	.withAction { ctx.pushText(it) }
-//		rules["normalElementText"]				= strNot("<")																							.withAction { ctx.pushText(it) }
-		rules["normalElementText"]				= oneOrMore(anyCharNot('<'))																			.withAction { ctx.pushText(it) }
+		rules["rawText"]						= oneOrMore(sequence([onlyIfNot(firstOf("script style"  .split.map { str("</${it}>") })), anyChar]))				.withAction { ctx.pushText(it) }
+		rules["escapableRawText"]				= oneOrMore(sequence([onlyIfNot(firstOf("textarea title".split.map { str("</${it}>") }.add(char('&')))), anyChar]))	.withAction { ctx.pushText(it) }
+		rules["normalElementText"]				= oneOrMore(anyCharNotOf("<&".chars))																				.withAction { ctx.pushText(it) }
 		
 		rules["attributes"]						= zeroOrMore(sequence([onlyIf(anyCharNotOf("/>".chars)), firstOf([anySpaceChar, doubleAttribute, singleAttribute, unquotedAttribute, emptyAttribute])]))
 		rules["emptyAttribute"]					= nTimes(1, attributeName).withAction { ctx.pushAttrVal(ctx.attrName); ctx.pushAttr }	// can't put the action on attributeName
@@ -98,9 +98,10 @@ internal class HtmlRules : Rules {
 		rules["doubleAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace, char('"'),  zeroOrMore(firstOf([anyCharNotOf(		 	     "\"&".chars)	.withAction { ctx.pushAttrVal(it) }, characterReference])).withAction { ctx.pushAttr }, char('"')])
 		rules["attributeName"]					= oneOrMore(anyCharNotOf(" \t\n\r\f\"'>/=".chars)) 																							  			.withAction { ctx.pushAttrName(it) }
 		
-		rules["characterReference"]				= firstOf([decNumCharRef, hexNumCharRef])		
-		rules["decNumCharRef"]					= sequence([str("&#"), oneOrMore(anyNumChar), char(';')])																	.withAction { ctx.pushDecCharRef(it) }
-		rules["hexNumCharRef"]					= sequence([str("&#x"), oneOrMore(firstOf([anyNumChar, anyCharInRange('a'..'f'), anyCharInRange('A'..'F')])), char(';')]) 	.withAction { ctx.pushHexCharRef(it) }		
+		rules["characterReference"]				= sequence([onlyIf(char('&')), firstOf([decNumCharRef, hexNumCharRef, namedCharRef])])		
+		rules["namedCharRef"]					= sequence([str("&"), oneOrMore(anyCharNot(';')), char(';')]) 	.withAction { ctx.pushNomCharRef(it) }		
+		rules["decNumCharRef"]					= sequence([str("&#"), oneOrMore(anyNumChar), char(';')])		.withAction { ctx.pushDecCharRef(it) }
+		rules["hexNumCharRef"]					= sequence([str("&#x"), oneOrMore(anyHexChar), char(';')])		.withAction { ctx.pushHexCharRef(it) }		
 
 		rules["cdata"]							= sequence([str("<![CDATA["), strNot("]]>"), str("]]>")]).withAction { ctx.pushCdata(it) }
 
@@ -117,7 +118,56 @@ internal class HtmlRules : Rules {
 		sequence([rule.withAction { ctx.pushTagName(it) }, zeroOrMore(anySpaceChar)])
 	}
 	
-	ParseCtx ctx() {
-		Actor.locals["afHtmlParser.ctx"]
+	SuccessCtx ctx() {
+		Actor.locals["afHtmlParser.successCtx"]
 	}
 }
+
+//internal class StartTagRule : Rule {
+//	private Rule rule
+//	
+//	new make(Rule rule) {
+//		this.rule = rule
+//	}
+//	
+//	override Bool doProcess(PegCtx ctx) {
+//		passed := ctx.process(rule)
+//		if (passed) {
+//			tagName := ctx.matched.trim
+//			pctx.tagStack.push(tagName)
+//		}
+//		return passed
+//	}
+//	
+//	override Str expression() { rule.expression }
+//	
+//	ParseCtx pctx() {
+//		Actor.locals["afHtmlParser.parseCtx"]
+//	}
+//}
+//
+//internal class EndTagRule : Rule {
+//	private Rule rule
+//	
+//	new make(Rule rule) {
+//		this.rule = rule
+//	}
+//	
+//	override Bool doProcess(PegCtx ctx) {
+//		passed := ctx.process(rule)
+//		if (passed) {
+//			tagName := ctx.matched.trim
+//			stack	:= pctx.tagStack.peek
+//			if (!tagName.equalsIgnoreCase(stack))
+//				throw ParseErr("End tag </${tagName}> does not match start tag <${stack}>")
+//			pctx.tagStack.pop
+//		}
+//		return passed
+//	}
+//	
+//	override Str expression() { rule.expression }
+//	
+//	ParseCtx pctx() {
+//		Actor.locals["afHtmlParser.parseCtx"]
+//	}
+//}

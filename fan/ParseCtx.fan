@@ -1,6 +1,10 @@
 using xml
 
-internal class ParseCtx {
+//internal class ParseCtx {
+//	Str[] tagStack	:= Str[,]
+//}
+
+internal class SuccessCtx {
 	XElem[]			roots		:= XElem[,]	
 	XElem?			openElement
 	XElem			attrElem	:= XElem("attrs")
@@ -73,8 +77,31 @@ internal class ParseCtx {
 		attrValue = null
 	}
 
+	Void pushNomCharRef(Str text) {
+		// decode XML entities 
+		// leave HTML entities as they are 'cos XML don't understand them
+		if (text.equalsIgnoreCase("&lt;"))		text = "<"
+		if (text.equalsIgnoreCase("&gt;"))		text = ">"
+		if (text.equalsIgnoreCase("&amp;"))		text = "&"
+		if (text.equalsIgnoreCase("&apos;"))	text = "'"
+		if (text.equalsIgnoreCase("&quot;"))	text = "\""
+
+		// unmatched entities will throw an Unsupported Entity Err, 
+		// so lets be nice and decode some common cases
+		if (text.equalsIgnoreCase("&nbsp;"))	text = "\u00A0"
+		
+		// TODO: decode ALL entities as detailed at:
+		// http://www.w3.org/html/wg/drafts/html/CR/entities.json
+		// That's all 2332 of them!
+		
+		if (attrName != null)
+			pushAttrVal(text)
+		else
+			pushText(text)
+	}
+
 	Void pushDecCharRef(Str text) {
-		ref := text["&#".size..<-";".size].toInt(10).toChar
+		ref := text["&#".size..<-1].toInt(10).toChar
 		if (attrName != null)
 			pushAttrVal(ref)
 		else
@@ -82,7 +109,7 @@ internal class ParseCtx {
 	}
 	
 	Void pushHexCharRef(Str text) {
-		ref := text["&#x".size..<-";".size].toInt(16).toChar
+		ref := text["&#x".size..<-1].toInt(16).toChar
 		if (attrName != null)
 			pushAttrVal(ref)
 		else

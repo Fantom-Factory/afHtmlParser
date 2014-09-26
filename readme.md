@@ -29,7 +29,7 @@ Other:
 - CData Sections: `<![CDATA[ cdata ]]>`
 - Numerical character references: `&#160;` and `&#xA0;`
 
-> "Html Parser" because only *Chuck Norris* can parse HTML with regular expressions.
+> *Html Parser* because only *Chuck Norris* can parse HTML with regular expressions.
 
 ## Install 
 
