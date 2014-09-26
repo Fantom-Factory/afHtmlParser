@@ -31,6 +31,12 @@ internal class TestAttributes : HtmlParserTest {
 
 		elem = parser.parseDoc("<div type=sub&#160;mit></div>")
 		verifyElemEq(elem, "<div type='sub\u00A0mit' />")
+
+		elem = parser.parseDoc("<div type=sub&amp;mit></div>")
+		verifyElemEq(elem, "<div type='sub&amp;mit' />")
+
+		elem = parser.parseDoc("<div type=sub&nbsp;mit></div>")
+		verifyElemEq(elem, "<div type='sub\u00A0mit' />")
 	}
 
 	Void testSingleQuotedAttributes() {
@@ -45,6 +51,12 @@ internal class TestAttributes : HtmlParserTest {
 
 		elem = parser.parseDoc("<div type='sub&#160;mit'></div>")
 		verifyElemEq(elem, "<div type='sub\u00A0mit' />")
+
+		elem = parser.parseDoc("<div type='sub&amp;mit'></div>")
+		verifyElemEq(elem, "<div type='sub&amp;mit' />")
+
+		elem = parser.parseDoc("<div type='sub&nbsp;mit'></div>")
+		verifyElemEq(elem, "<div type='sub\u00A0mit' />")
 	}
 
 	Void testDoubleQuotedAttributes() {
@@ -58,6 +70,12 @@ internal class TestAttributes : HtmlParserTest {
 		verifyElemEq(elem, "<div type='submit' />")
 
 		elem = parser.parseDoc("<div type  =  \"sub&#160;mit\" />")
+		verifyElemEq(elem, "<div type='sub\u00A0mit' />")
+
+		elem = parser.parseDoc("<div type=\"sub&amp;mit\"></div>")
+		verifyElemEq(elem, "<div type='sub&amp;mit' />")
+
+		elem = parser.parseDoc("<div type=\"sub&nbsp;mit\"></div>")
 		verifyElemEq(elem, "<div type='sub\u00A0mit' />")
 	}
 

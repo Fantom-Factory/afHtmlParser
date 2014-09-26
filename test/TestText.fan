@@ -1,7 +1,9 @@
+using xml
 
 internal class TestText : HtmlParserTest {
 	
-	HtmlParser parser := HtmlParser()
+	HtmlParser	parser := HtmlParser()
+	XElem?		elem
 	
 	Void testRawText() {
 		// plain text
@@ -14,9 +16,9 @@ internal class TestText : HtmlParserTest {
 		verifyEq(elem.text.val, "<!-- comment -->")
 
 		// no char refs
-		elem = parser.parseDoc("<script>&#160;&#xA0;</script>")
-		verifyElemEq(elem, "<script>&amp;#160;&amp;#xA0;</script>")
-		verifyEq(elem.text.val, "&#160;&#xA0;")
+		elem = parser.parseDoc("<script>wot &#160;&#xA0;&nbsp; ever</script>")
+		verifyElemEq(elem, "<script>wot &amp;#160;&amp;#xA0;&amp;nbsp; ever</script>")
+		verifyEq(elem.text.val, "wot &#160;&#xA0;&nbsp; ever")
 
 		// no cdata
 		elem = parser.parseDoc("<script><![CDATA[ nope ]]></script>")
@@ -35,14 +37,15 @@ internal class TestText : HtmlParserTest {
 		verifyElemEq(elem, "<textarea> Dude! </textarea>")
 
 		// no comments
+//		afPegger::Parser#.pod.log.level = LogLevel.debug
 		elem = parser.parseDoc("<textarea><!-- comment --></textarea>")
 		verifyElemEq(elem, "<textarea>&lt;!-- comment --></textarea>")
 		verifyEq(elem.text.val, "<!-- comment -->")
 
 		// char refs
-		elem = parser.parseDoc("<textarea>&#160;&#xA0;</textarea>")
-		verifyElemEq(elem, "<textarea>&#160;&#xA0;</textarea>")
-		verifyEq(elem.text.val, "\u00A0\u00A0")
+		elem = parser.parseDoc("<textarea>wot &#160;&#xA0;&nbsp; ever</textarea>")
+		verifyElemEq(elem, "<textarea>wot &#160;&#xA0;&#160; ever</textarea>")
+		verifyEq(elem.text.val, "wot \u00A0\u00A0\u00A0 ever")
 
 		// no cdata
 		elem = parser.parseDoc("<textarea><![CDATA[ nope ]]></textarea>")
@@ -54,7 +57,7 @@ internal class TestText : HtmlParserTest {
 		verifyElemEq(elem, "<textarea>&lt;wot>&lt;/wot></textarea>")
 		verifyEq(elem.text.val, "<wot></wot>")
 	}
-	
+
 	Void testNormalText() {
 		// plain text
 		elem := parser.parseDoc("<div> Dude! </div>")
@@ -66,9 +69,9 @@ internal class TestText : HtmlParserTest {
 		verifyNull(elem.text)
 
 		// char refs
-		elem = parser.parseDoc("<div>&#160;&#xA0;</div>")
-		verifyElemEq(elem, "<div>&#160;&#xA0;</div>")
-		verifyEq(elem.text.val, "\u00A0\u00A0")
+		elem = parser.parseDoc("<div>wot &#160;&#xA0;&nbsp; ever</div>")
+		verifyElemEq(elem, "<div>wot &#160;&#xA0;&#160; ever</div>")
+		verifyEq(elem.text.val, "wot \u00A0\u00A0\u00A0 ever")
 
 		// cdata
 		elem = parser.parseDoc("<div><![CDATA[ yep ]]></div>")

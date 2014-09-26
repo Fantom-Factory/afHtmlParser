@@ -12,7 +12,7 @@ class Build : BuildPod {
 			"proj.name"		: "HTML Parser",
 			"internal"		: "true",
 			"tags"			: "web",
-			"repo.private"	: "true"
+			"repo.private"	: "false"
 		]
 
 		depends = [
