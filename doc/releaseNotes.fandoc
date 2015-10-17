@@ -1,0 +1,12 @@
+Versions
+********
+
+v0.0.4
+------
+ - New: Now available in Javascript!
+ - Chg: Removed dependency on 'concurrent'.
+
+v0.0.2
+------
+ - New: Preview release.
+
