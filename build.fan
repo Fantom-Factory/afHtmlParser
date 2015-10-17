@@ -25,8 +25,5 @@ class Build : BuildPod {
 	
 		srcDirs = [`test/`, `fan/`]
 		resDirs = [`doc/`]
-		
-		meta["afBuild.docApi"] = "false"
-		meta["afBuild.docSrc"] = "false"
 	}
 }
