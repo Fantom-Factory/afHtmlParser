@@ -1,6 +1,6 @@
 using afPegger
-using concurrent
 
+@Js
 internal class HtmlRules : Rules {
 	
 	Rule rootRule() {
@@ -65,17 +65,17 @@ internal class HtmlRules : Rules {
 		
 		rules["element"]						= firstOf([voidElement, rawTextElement, escapableRawTextElement, selfClosingElement, normalElement])
 
-		rules["voidElement"]					= sequence([char('<'), voidElementName, attributes, char('>')])				.withAction { ctx.pushVoidTag }
+		rules["voidElement"]					= sequence([char('<'), voidElementName, attributes, char('>')])				.withAction |s,tx| { c(tx).pushVoidTag }
 		rules["rawTextElement"]					= sequence([rawTextElementTag, rawTextElementContent, endTag])
 		rules["escapableRawTextElement"]		= sequence([escapableRawTextElementTag, escapableRawTextElementContent, endTag])
-		rules["selfClosingElement"]				= sequence([char('<'), tagName, attributes, str("/>")])						.withAction { ctx.pushVoidTag }
+		rules["selfClosingElement"]				= sequence([char('<'), tagName, attributes, str("/>")])						.withAction |s,tx| { c(tx).pushVoidTag }
 		rules["normalElement"]					= sequence([startTag, optional(normalElementContent), endTag])
 
-		rules["rawTextElementTag"]				= sequence([char('<'), rawTextElementName, attributes, char('>')])			.withAction { ctx.pushStartTag }
-		rules["escapableRawTextElementTag"]		= sequence([char('<'), escapableRawTextElementName, attributes, char('>')])	.withAction { ctx.pushStartTag }
+		rules["rawTextElementTag"]				= sequence([char('<'), rawTextElementName, attributes, char('>')])			.withAction |s,tx| { c(tx).pushStartTag }
+		rules["escapableRawTextElementTag"]		= sequence([char('<'), escapableRawTextElementName, attributes, char('>')])	.withAction |s,tx| { c(tx).pushStartTag }
 
-		rules["startTag"]						= sequence([char('<'), tagName, attributes, char('>')])						.withAction { ctx.pushStartTag }
-		rules["endTag"]							= sequence([str("</"), tagName, char('>')])									.withAction { ctx.pushEndTag }
+		rules["startTag"]						= sequence([char('<'), tagName, attributes, char('>')])						.withAction |s,tx| { c(tx).pushStartTag }
+		rules["endTag"]							= sequence([str("</"), tagName, char('>')])									.withAction |s,tx| { c(tx).pushEndTag }
 
 		rules["tagName"]						= tagNameRule(sequence([anyAlphaChar, zeroOrMore(anyCharNotOf("\t\n\f />".chars))]))
 
@@ -87,40 +87,38 @@ internal class HtmlRules : Rules {
 		rules["escapableRawTextElementContent"]	= zeroOrMore(firstOf([escapableRawText, characterReference]))
 		rules["normalElementContent"]			= sequence([onlyIfNot(str("</")), zeroOrMore(firstOf([normalElementText, characterReference, comment, cdata, element]))])
 		
-		rules["rawText"]						= oneOrMore(sequence([onlyIfNot(firstOf("script style"  .split.map { str("</${it}>") })), anyChar]))				.withAction { ctx.pushText(it) }
-		rules["escapableRawText"]				= oneOrMore(sequence([onlyIfNot(firstOf("textarea title".split.map { str("</${it}>") }.add(char('&')))), anyChar]))	.withAction { ctx.pushText(it) }
-		rules["normalElementText"]				= oneOrMore(anyCharNotOf("<&".chars))																				.withAction { ctx.pushText(it) }
+		rules["rawText"]						= oneOrMore(sequence([onlyIfNot(firstOf("script style"  .split.map { str("</${it}>") })), anyChar]))				.withAction |s,tx| { c(tx).pushText(s) }
+		rules["escapableRawText"]				= oneOrMore(sequence([onlyIfNot(firstOf("textarea title".split.map { str("</${it}>") }.add(char('&')))), anyChar]))	.withAction |s,tx| { c(tx).pushText(s) }
+		rules["normalElementText"]				= oneOrMore(anyCharNotOf("<&".chars))																				.withAction |s,tx| { c(tx).pushText(s) }
 		
 		rules["attributes"]						= zeroOrMore(sequence([onlyIf(anyCharNotOf("/>".chars)), firstOf([anySpaceChar, doubleAttribute, singleAttribute, unquotedAttribute, emptyAttribute])]))
-		rules["emptyAttribute"]					= nTimes(1, attributeName).withAction { ctx.pushAttrVal(ctx.attrName); ctx.pushAttr }	// can't put the action on attributeName
-		rules["unquotedAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace,			   oneOrMore(firstOf([anyCharNotOf(" \t\n\r\f\"'=<>`&".chars)	.withAction { ctx.pushAttrVal(it) }, characterReference])).withAction { ctx.pushAttr } ])
-		rules["singleAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace, char('\''), zeroOrMore(firstOf([anyCharNotOf(		 	      "'&".chars)	.withAction { ctx.pushAttrVal(it) }, characterReference])).withAction { ctx.pushAttr }, char('\'')])
-		rules["doubleAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace, char('"'),  zeroOrMore(firstOf([anyCharNotOf(		 	     "\"&".chars)	.withAction { ctx.pushAttrVal(it) }, characterReference])).withAction { ctx.pushAttr }, char('"')])
-		rules["attributeName"]					= oneOrMore(anyCharNotOf(" \t\n\r\f\"'>/=".chars)) 																							  			.withAction { ctx.pushAttrName(it) }
+		rules["emptyAttribute"]					= nTimes(1, attributeName).withAction |s,tx| { c(tx).pushAttrVal(c(tx).attrName); c(tx).pushAttr }	// can't put the action on attributeName
+		rules["unquotedAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace,			   oneOrMore(firstOf([anyCharNotOf(" \t\n\r\f\"'=<>`&".chars)	.withAction |s,tx| { c(tx).pushAttrVal(s) }, characterReference])).withAction |s,tx| { c(tx).pushAttr } ])
+		rules["singleAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace, char('\''), zeroOrMore(firstOf([anyCharNotOf(		 	      "'&".chars)	.withAction |s,tx| { c(tx).pushAttrVal(s) }, characterReference])).withAction |s,tx| { c(tx).pushAttr }, char('\'')])
+		rules["doubleAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace, char('"'),  zeroOrMore(firstOf([anyCharNotOf(		 	     "\"&".chars)	.withAction |s,tx| { c(tx).pushAttrVal(s) }, characterReference])).withAction |s,tx| { c(tx).pushAttr }, char('"')])
+		rules["attributeName"]					= oneOrMore(anyCharNotOf(" \t\n\r\f\"'>/=".chars)) 																						.withAction |s,tx| { c(tx).pushAttrName(s) }
 		
 		rules["characterReference"]				= sequence([onlyIf(char('&')), firstOf([decNumCharRef, hexNumCharRef, namedCharRef])])		
-		rules["namedCharRef"]					= sequence([str("&"), oneOrMore(anyCharNot(';')), char(';')]) 	.withAction { ctx.pushNomCharRef(it) }		
-		rules["decNumCharRef"]					= sequence([str("&#"), oneOrMore(anyNumChar), char(';')])		.withAction { ctx.pushDecCharRef(it) }
-		rules["hexNumCharRef"]					= sequence([str("&#x"), oneOrMore(anyHexChar), char(';')])		.withAction { ctx.pushHexCharRef(it) }		
+		rules["namedCharRef"]					= sequence([str("&"), oneOrMore(anyCharNot(';')), char(';')]) 	.withAction |s,tx| { c(tx).pushNomCharRef(s) }
+		rules["decNumCharRef"]					= sequence([str("&#"), oneOrMore(anyNumChar), char(';')])		.withAction |s,tx| { c(tx).pushDecCharRef(s) }
+		rules["hexNumCharRef"]					= sequence([str("&#x"), oneOrMore(anyHexChar), char(';')])		.withAction |s,tx| { c(tx).pushHexCharRef(s) }		
 
-		rules["cdata"]							= sequence([str("<![CDATA["), strNot("]]>"), str("]]>")]).withAction { ctx.pushCdata(it) }
+		rules["cdata"]							= sequence([str("<![CDATA["), strNot("]]>"), str("]]>")]).withAction |s,tx| { c(tx).pushCdata(s) }
 
 		rules["comment"]						= sequence([str("<!--"), strNot("--"), str("-->")])
 
-		rules["doctype"]						= sequence([str("<!DOCTYPE"), oneOrMore(anySpaceChar), oneOrMore(anyAlphaNumChar).withAction { ctx.pushDoctype(it) }, zeroOrMore(firstOf([doctypeSystemId, doctypePublicId])), whitespace, str(">")])
-		rules["doctypeSystemId"]				= sequence([oneOrMore(anySpaceChar), str("SYSTEM"), oneOrMore(anySpaceChar), firstOf([sequence([char('"'), zeroOrMore(anyCharNot('"')).withAction { ctx.pushSystemId(it) }, char('"')]), sequence([char('\''), zeroOrMore(anyCharNot('\'')).withAction { ctx.pushSystemId(it) }, char('\'')])])])
-		rules["doctypePublicId"]				= sequence([oneOrMore(anySpaceChar), str("PUBLIC"), oneOrMore(anySpaceChar), firstOf([sequence([char('"'), zeroOrMore(anyCharNot('"')).withAction { ctx.pushPublicId(it) }, char('"')]), sequence([char('\''), zeroOrMore(anyCharNot('\'')).withAction { ctx.pushPublicId(it) }, char('\'')])])])
+		rules["doctype"]						= sequence([str("<!DOCTYPE"), oneOrMore(anySpaceChar), oneOrMore(anyAlphaNumChar).withAction |s,tx| { c(tx).pushDoctype(s) }, zeroOrMore(firstOf([doctypeSystemId, doctypePublicId])), whitespace, str(">")])
+		rules["doctypeSystemId"]				= sequence([oneOrMore(anySpaceChar), str("SYSTEM"), oneOrMore(anySpaceChar), firstOf([sequence([char('"'), zeroOrMore(anyCharNot('"')).withAction |s,tx| { c(tx).pushSystemId(s) }, char('"')]), sequence([char('\''), zeroOrMore(anyCharNot('\'')).withAction |s,tx| { c(tx).pushSystemId(s) }, char('\'')])])])
+		rules["doctypePublicId"]				= sequence([oneOrMore(anySpaceChar), str("PUBLIC"), oneOrMore(anySpaceChar), firstOf([sequence([char('"'), zeroOrMore(anyCharNot('"')).withAction |s,tx| { c(tx).pushPublicId(s) }, char('"')]), sequence([char('\''), zeroOrMore(anyCharNot('\'')).withAction |s,tx| { c(tx).pushPublicId(s) }, char('\'')])])])
 		
 		return preamble
 	}
 	
 	Rule tagNameRule(Rule rule) {
-		sequence([rule.withAction { ctx.pushTagName(it) }, zeroOrMore(anySpaceChar)])
+		sequence([rule.withAction |s,tx| { c(tx).pushTagName(s) }, zeroOrMore(anySpaceChar)])
 	}
 	
-	SuccessCtx ctx() {
-		Actor.locals["afHtmlParser.successCtx"]
-	}
+	SuccessCtx c(Obj ctx) { ctx }
 }
 
 //internal class StartTagRule : Rule {

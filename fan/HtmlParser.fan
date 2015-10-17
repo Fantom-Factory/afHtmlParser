@@ -1,8 +1,8 @@
 using xml
 using afPegger
-using concurrent
 
 ** Parses HTML strings into XML documents.
+@Js
 class HtmlParser {
 	private Log log			:= HtmlParser#.pod.log 
 	private Rule htmlRules	:= HtmlRules().rootRule
@@ -13,11 +13,7 @@ class HtmlParser {
 		parser := Parser(htmlRules)
 		
 		sctx := SuccessCtx()
-		Actor.locals["afHtmlParser.successCtx"] = sctx
-//		Actor.locals["afHtmlParser.parseCtx"]	= ParseCtx()
-		res := parser.parse(html.in)
-		Actor.locals.remove("afHtmlParser.successCtx")
-//		Actor.locals.remove("afHtmlParser.parseCtx")
+		res := parser.parse(html.in, sctx)
 		
 		if (log.isDebug) {
 			millis := (Duration.now - startTime).toMillis.toLocale("#,000")		

@@ -17,11 +17,10 @@ class Build : BuildPod {
 
 		depends = [
 			"sys 1.0",
-			"concurrent 1.0",	// TODO: remove dependency on concurrent
+			"xml 1.0",
 
 			// ---- Core ------------------------
-			"afPegger 0+",
-			"xml 1.0"
+			"afPegger 0.0.5+"	// FIXME: 0.0.6
 		]
 	
 		srcDirs = [`test/`, `fan/`]

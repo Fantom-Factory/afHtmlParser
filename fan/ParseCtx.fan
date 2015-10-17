@@ -4,6 +4,7 @@ using xml
 //	Str[] tagStack	:= Str[,]
 //}
 
+@Js
 internal class SuccessCtx {
 	XElem[]			roots		:= XElem[,]	
 	XElem?			openElement
