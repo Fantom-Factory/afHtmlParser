@@ -1,4 +1,5 @@
 
+@Js
 class TestExample : Test {
 	
 	Void testExample() {

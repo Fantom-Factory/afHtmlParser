@@ -1,4 +1,5 @@
 
+@Js
 internal class TestFantomFactory : HtmlParserTest {
 	
 	Void testFfWebSite() {

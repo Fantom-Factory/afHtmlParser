@@ -1,5 +1,6 @@
 using xml
 
+@Js
 internal class TestDoctype : HtmlParserTest {
 	
 	XDocType?	docType

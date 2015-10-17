@@ -1,5 +1,6 @@
 using xml
 
+@Js
 internal class TestAttributes : HtmlParserTest {
 	
 	XElem?		elem
