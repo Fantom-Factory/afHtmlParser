@@ -1,5 +1,6 @@
 using xml
 
+@Js
 internal class TestPreamble : HtmlParserTest {
 	
 	HtmlParser 	parser := HtmlParser()

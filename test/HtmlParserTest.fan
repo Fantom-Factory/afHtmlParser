@@ -1,5 +1,6 @@
 using xml
 
+@Js
 internal class HtmlParserTest : Test {
 
 //	override Void setup() {

@@ -1,6 +1,7 @@
 using xml
 
 ** http://www.w3.org/html/wg/drafts/html/CR/syntax.html
+@Js
 internal class TestTags : HtmlParserTest {
 	
 	HtmlParser parser := HtmlParser()
