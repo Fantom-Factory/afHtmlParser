@@ -13,14 +13,14 @@ class HtmlParser {
 		parser := Parser(htmlRules)
 		
 		sctx := SuccessCtx()
-		res := parser.parse(html.in, sctx)
+		matched := parser.matches(html.in, sctx)
 		
 		if (log.isDebug) {
 			millis := (Duration.now - startTime).toMillis.toLocale("#,000")		
 			log.debug("HTML parsed in ${millis}ms")
 		}
 		
-		if (res == null)
+		if (!matched)
 			throw ParseErr("Could not parse HTML: \n${html.toCode(null)}")
 		
 		return sctx.document.root

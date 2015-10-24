@@ -4,7 +4,7 @@ class Build : BuildPod {
 
 	new make() {
 		podName = "afHtmlParser"
-		summary = "Parses HTML strings into XML documents"
+		summary = "Parses HTML text into XML documents"
 		summary = "Because only Chuck Norris can parse HTML with regular expressions"
 		version = Version("0.0.4")
 
