@@ -5,6 +5,7 @@ v0.0.4
 ------
  - New: Now available in Javascript!
  - Chg: Removed dependency on 'concurrent'.
+ - Chg: Updated to [Pegger 0.1.0]`pod:afPegger`.
 
 v0.0.2
 ------

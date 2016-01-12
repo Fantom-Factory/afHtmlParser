@@ -20,10 +20,10 @@ class Build : BuildPod {
 			"xml 1.0",
 
 			// ---- Core ------------------------
-			"afPegger 0.0.6+"
+			"afPegger 0.1.0 - 0.1"
 		]
 	
-		srcDirs = [`test/`, `fan/`]
+		srcDirs = [`fan/`, `test/`]
 		resDirs = [`doc/`]
 	}
 }
