@@ -20,11 +20,11 @@ class Build : BuildPod {
 			"concurrent 1.0",	// TODO: remove dependency on concurrent
 
 			// ---- Core ------------------------
-			"afPegger 0+",
+			"afPegger 0.0.4 - 0.0",
 			"xml 1.0"
 		]
 	
-		srcDirs = [`test/`, `fan/`]
+		srcDirs = [`fan/`, `test/`]
 		resDirs = [`doc/`]
 		
 		meta["afBuild.docApi"] = "false"
