@@ -1,7 +1,11 @@
 Versions
 ********
 
+v0.0.4
+======
+ - Chg: Locked down the version of [Pegger]`pod:afPegger`.
+
 v0.0.2
-------
+======
  - New: Preview release.
 
