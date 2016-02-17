@@ -6,13 +6,13 @@ class Build : BuildPod {
 		podName = "afHtmlParser"
 		summary = "Parses HTML strings into XML documents"
 		summary = "Because only Chuck Norris can parse HTML with regular expressions"
-		version = Version("0.0.4")
+		version = Version("0.0.5")
 
 		meta = [
 			"proj.name"		: "HTML Parser",
 			"repo.internal"	: "true",
 			"repo.tags"		: "web",
-			"repo.public"	: "true"
+			"repo.public"	: "false"
 		]
 
 		depends = [
@@ -25,9 +25,6 @@ class Build : BuildPod {
 		]
 	
 		srcDirs = [`fan/`, `test/`]
-		resDirs = [`doc/`]
-		
-		meta["afBuild.docApi"] = "false"
-		meta["afBuild.docSrc"] = "false"
+		resDirs = [`doc/`]		
 	}
 }
