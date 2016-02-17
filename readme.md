@@ -1,7 +1,7 @@
-#HTML Parser v0.0.2
+#HTML Parser v0.0.4
 ---
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v0.0.2](http://img.shields.io/badge/pod-v0.0.2-yellow.svg)](http://www.fantomfactory.org/pods/afHtmlParser)
+[![pod: v0.0.4](http://img.shields.io/badge/pod-v0.0.4-yellow.svg)](http://www.fantomfactory.org/pods/afHtmlParser)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
@@ -41,7 +41,7 @@ Other:
 
 Install `HTML Parser` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
 
-    C:\> fanr install -r http://repo.status302.com/fanr/ afHtmlParser
+    C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afHtmlParser
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
