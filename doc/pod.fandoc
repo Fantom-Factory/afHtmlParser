@@ -1,6 +1,6 @@
 Overview
 ********
-A valiant effort to parse valid HTML5 documents into XML as defined by [W3C HTML Syntax]`http://www.w3.org/html/wg/drafts/html/CR/syntax.html#syntax`.
+A valiant effort to parse valid HTML5 documents into XML as defined by [W3C HTML Syntax]`https://www.w3.org/TR/html-markup/syntax.html`.
 
 Html Parser currently recognises and supports:
 
