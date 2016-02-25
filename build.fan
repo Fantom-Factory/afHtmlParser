@@ -11,7 +11,7 @@ class Build : BuildPod {
 		meta = [
 			"proj.name"		: "HTML Parser",
 			"repo.internal"	: "true",
-			"repo.tags"		: "web",
+			"repo.tags"		: "templating, web",
 			"repo.public"	: "false"
 		]
 
