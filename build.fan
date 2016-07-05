@@ -6,7 +6,7 @@ class Build : BuildPod {
 		podName = "afHtmlParser"
 		summary = "Parses HTML text into XML documents"
 		summary = "Because only Chuck Norris can parse HTML with regular expressions"
-		version = Version("0.1.0")
+		version = Version("0.1.1")
 
 		meta = [
 			"proj.name"		: "HTML Parser",
