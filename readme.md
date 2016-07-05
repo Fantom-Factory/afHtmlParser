@@ -1,14 +1,14 @@
-#HTML Parser v0.0.2
+#HTML Parser v0.1.0
 ---
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v0.0.2](http://img.shields.io/badge/pod-v0.0.2-yellow.svg)](http://www.fantomfactory.org/pods/afHtmlParser)
+[![pod: v0.1.0](http://img.shields.io/badge/pod-v0.1.0-yellow.svg)](http://www.fantomfactory.org/pods/afHtmlParser)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
 
 *HTML Parser is a support library that aids Alien-Factory in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.*
 
-A valiant effort to parse valid HTML5 documents into XML as defined by [W3C HTML Syntax](http://www.w3.org/html/wg/drafts/html/CR/syntax.html#syntax).
+A valiant effort to parse valid HTML5 documents into XML as defined by [W3C HTML Syntax](https://www.w3.org/TR/html-markup/syntax.html).
 
 Html Parser currently recognises and supports:
 
@@ -35,17 +35,19 @@ Other:
 - CData Sections: `<![CDATA[ cdata ]]>`
 - Numerical character references: `&#160;` and `&#xA0;`
 
-> *Html Parser* because only *Chuck Norris* can parse HTML with regular expressions.
+  > *Html Parser* because only *Chuck Norris* can parse HTML with regular expressions.
+
+
 
 ## Install
 
 Install `HTML Parser` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
 
-    C:\> fanr install -r http://repo.status302.com/fanr/ afHtmlParser
+    C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afHtmlParser
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
-    depends = ["sys 1.0", ..., "afHtmlParser 0.0"]
+    depends = ["sys 1.0", ..., "afHtmlParser 0.1"]
 
 ## Documentation
 
