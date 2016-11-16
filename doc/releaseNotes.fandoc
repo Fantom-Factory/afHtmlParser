@@ -4,6 +4,7 @@ Versions
 v0.1.2
 ======
  - Chg: More lenient doctype parsing.
+ - Chg: Single non-char ref '&' are parsed as is.
 
 v0.1.0
 ======

@@ -47,6 +47,7 @@ internal class HtmlRules : Rules {
 		decNumCharRef					:= rules["decNumCharRef"]
 		hexNumCharRef					:= rules["hexNumCharRef"]
 		namedCharRef					:= rules["namedCharRef"]
+		borkedRef						:= rules["borkedRef"]
 		
 		cdata							:= rules["cdata"]
 		
@@ -98,10 +99,11 @@ internal class HtmlRules : Rules {
 		rules["doubleAttribute"]				= sequence([attributeName, whitespace, char('='), whitespace, char('"'),  zeroOrMore(firstOf([anyCharNotOf(		 	     "\"&".chars)	.withAction |s,tx| { c(tx).pushAttrVal(s) }, characterReference])).withAction |s,tx| { c(tx).pushAttr }, char('"')])
 		rules["attributeName"]					= oneOrMore(anyCharNotOf(" \t\n\r\f\"'>/=".chars)) 																						.withAction |s,tx| { c(tx).pushAttrName(s) }
 		
-		rules["characterReference"]				= sequence([onlyIf(char('&')), firstOf([decNumCharRef, hexNumCharRef, namedCharRef])])		
-		rules["namedCharRef"]					= sequence([str("&"), oneOrMore(anyCharNot(';')), char(';')]) 	.withAction |s,tx| { c(tx).pushNomCharRef(s) }
-		rules["decNumCharRef"]					= sequence([str("&#"), oneOrMore(anyNumChar), char(';')])		.withAction |s,tx| { c(tx).pushDecCharRef(s) }
-		rules["hexNumCharRef"]					= sequence([str("&#x"), oneOrMore(anyHexChar), char(';')])		.withAction |s,tx| { c(tx).pushHexCharRef(s) }		
+		rules["characterReference"]				= sequence([onlyIf(char('&')), firstOf([decNumCharRef, hexNumCharRef, namedCharRef, borkedRef])])		
+		rules["namedCharRef"]					= sequence([char('&'), oneOrMore(anyCharNotOf(";>".chars)), char(';')]) .withAction |s,tx| { c(tx).pushNomCharRef(s) }
+		rules["decNumCharRef"]					= sequence([str("&#"), oneOrMore(anyNumChar), char(';')])				.withAction |s,tx| { c(tx).pushDecCharRef(s) }
+		rules["hexNumCharRef"]					= sequence([str("&#x"), oneOrMore(anyHexChar), char(';')])				.withAction |s,tx| { c(tx).pushHexCharRef(s) }		
+		rules["borkedRef"]						= sequence([char('&'), onlyIf(anySpaceChar)])							.withAction |s,tx| { c(tx).pushBorkedRef (s) }		
 
 		rules["cdata"]							= sequence([str("<![CDATA["), strNot("]]>"), str("]]>")]).withAction |s,tx| { c(tx).pushCdata(s) }
 
