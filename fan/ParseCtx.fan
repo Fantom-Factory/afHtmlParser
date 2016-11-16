@@ -117,6 +117,13 @@ internal class SuccessCtx {
 			pushText(ref)
 	}
 
+	Void pushBorkedRef(Str text) {
+		if (attrName != null)
+			pushAttrVal(text)
+		else
+			pushText(text)
+	}
+
 	Void pushCdata(Str text) {
 		cdata := XText(text["<![CDATA[".size..<-"]]>".size])
 		cdata.cdata = true
