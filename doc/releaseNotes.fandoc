@@ -1,6 +1,10 @@
 Versions
 ********
 
+v0.1.2
+======
+ - Chg: More lenient doctype parsing.
+
 v0.1.0
 ======
  - New: Now available in Javascript!
