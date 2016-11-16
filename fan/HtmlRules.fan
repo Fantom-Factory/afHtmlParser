@@ -53,8 +53,8 @@ internal class HtmlRules : Rules {
 		comment							:= rules["comment"]
 
 		doctype							:= rules["doctype"]
-		doctypeSystemId					:= rules["doctypeSystemId"]
 		doctypePublicId					:= rules["doctypePublicId"]
+		doctypeSystemId					:= rules["doctypeSystemId"]
 
 		whitespace						:= zeroOrMore(anySpaceChar)
 		blurb							:= zeroOrMore(firstOf([oneOrMore(anySpaceChar), comment]))
@@ -107,9 +107,9 @@ internal class HtmlRules : Rules {
 
 		rules["comment"]						= sequence([str("<!--"), strNot("--"), str("-->")])
 
-		rules["doctype"]						= sequence([str("<!DOCTYPE"), oneOrMore(anySpaceChar), oneOrMore(anyAlphaNumChar).withAction |s,tx| { c(tx).pushDoctype(s) }, zeroOrMore(firstOf([doctypeSystemId, doctypePublicId])), whitespace, str(">")])
-		rules["doctypeSystemId"]				= sequence([oneOrMore(anySpaceChar), str("SYSTEM"), oneOrMore(anySpaceChar), firstOf([sequence([char('"'), zeroOrMore(anyCharNot('"')).withAction |s,tx| { c(tx).pushSystemId(s) }, char('"')]), sequence([char('\''), zeroOrMore(anyCharNot('\'')).withAction |s,tx| { c(tx).pushSystemId(s) }, char('\'')])])])
+		rules["doctype"]						= sequence([str("<!DOCTYPE"), oneOrMore(anySpaceChar), oneOrMore(anyAlphaNumChar).withAction |s,tx| { c(tx).pushDoctype(s) }, zeroOrMore(firstOf([doctypePublicId, doctypeSystemId])), whitespace, str(">")])
 		rules["doctypePublicId"]				= sequence([oneOrMore(anySpaceChar), str("PUBLIC"), oneOrMore(anySpaceChar), firstOf([sequence([char('"'), zeroOrMore(anyCharNot('"')).withAction |s,tx| { c(tx).pushPublicId(s) }, char('"')]), sequence([char('\''), zeroOrMore(anyCharNot('\'')).withAction |s,tx| { c(tx).pushPublicId(s) }, char('\'')])])])
+		rules["doctypeSystemId"]				= sequence([oneOrMore(anySpaceChar), optional(sequence([str("SYSTEM"), oneOrMore(anySpaceChar)])), firstOf([sequence([char('"'), zeroOrMore(anyCharNot('"')).withAction |s,tx| { c(tx).pushSystemId(s) }, char('"')]), sequence([char('\''), zeroOrMore(anyCharNot('\'')).withAction |s,tx| { c(tx).pushSystemId(s) }, char('\'')])])])
 		
 		return preamble
 	}
