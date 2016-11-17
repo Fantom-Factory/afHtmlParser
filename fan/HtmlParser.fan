@@ -9,9 +9,12 @@ class HtmlParser {
 	
 	** Parses the given HTML string into an XML document.
 	XElem parseDoc(Str html) {
+//	XElem parseDoc(Str html, [Str:Obj]? options := null) {
 		startTime := Duration.now
 		parser := Parser(htmlRules)
 		
+//		beLenient := options?.get("lenient") == true
+//		sctx := SuccessCtx() { it.beLenient = beLenient }
 		sctx := SuccessCtx()
 		matched := parser.matches(html.in, sctx)
 		
