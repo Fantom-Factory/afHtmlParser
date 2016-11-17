@@ -1,11 +1,8 @@
 using xml
 
-//internal class ParseCtx {
-//	Str[] tagStack	:= Str[,]
-//}
-
 @Js
 internal class SuccessCtx {
+	static const Log log		:= SuccessCtx#.pod.log
 	XElem[]			roots		:= XElem[,]	
 	XElem?			openElement
 	XElem			attrElem	:= XElem("attrs")
@@ -13,6 +10,7 @@ internal class SuccessCtx {
 	Str?			attrValue
 	Str?			tagName
 	XDoc?			doc
+	Bool			beLenient
 	
 	Void pushDoctype(Str name) {
 		doc = XDoc()
@@ -131,8 +129,14 @@ internal class SuccessCtx {
 	}
 	
 	Void pushEndTag() {
-		if (tagName != openElement.name)
-			throw ParseErr("End tag </${tagName}> does not match start tag <${openElement.name}>")
+		if (tagName != openElement.name) {
+			msg := "End tag </${tagName}> does not match start tag <${openElement.name}>"
+			if (beLenient) {
+				log.warn(msg)
+				return
+			}
+			throw ParseErr(msg)
+		}
 
 		if (openElement.parent?.nodeType != XNodeType.doc)
 			openElement = openElement.parent
