@@ -1,7 +1,7 @@
-#HTML Parser v0.1.0
+#HTML Parser v0.1.2
 ---
-[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v0.1.0](http://img.shields.io/badge/pod-v0.1.0-yellow.svg)](http://www.fantomfactory.org/pods/afHtmlParser)
+[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)
+[![pod: v0.1.2](http://img.shields.io/badge/pod-v0.1.2-yellow.svg)](http://www.fantomfactory.org/pods/afHtmlParser)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
@@ -41,17 +41,21 @@ Other:
 
 ## Install
 
-Install `HTML Parser` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
+Install `HTML Parser` with the Fantom Pod Manager ( [FPM](http://pods.fantomfactory.org/pods/afFpm) ):
+
+    C:\> fpm install afHtmlParser
+
+Or install `HTML Parser` with [fanr](http://fantom.org/doc/docFanr/Tool.html#install):
 
     C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afHtmlParser
 
-To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
+To use in a [Fantom](http://fantom-lang.org/) project, add a dependency to `build.fan`:
 
     depends = ["sys 1.0", ..., "afHtmlParser 0.1"]
 
 ## Documentation
 
-Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fantomfactory.org/pods/afHtmlParser/).
+Full API & fandocs are available on the [Eggbox](http://eggbox.fantomfactory.org/pods/afHtmlParser/) - the Fantom Pod Repository.
 
 ## Quick Start
 
