@@ -6,36 +6,36 @@ internal class TestTags : HtmlParserTest {
 	
 	HtmlParser parser := HtmlParser()
 
-//	Void testValidSimpleTag() {
-//		elem := parser.parseDoc("<html></html>")
-//		verifyEq(elem.name, "html")
-//		verifyEq(elem.attrs.size, 0)
-//		verifyEq(elem.children.size, 0)
-//
-//		elem = parser.parseDoc("<html  ></html>")
-//		verifyEq(elem.name, "html")
-//		verifyEq(elem.attrs.size, 0)
-//		verifyEq(elem.children.size, 0)
-//
-//		elem = parser.parseDoc("<html/>")
-//		verifyEq(elem.name, "html")
-//		verifyEq(elem.attrs.size, 0)
-//		verifyEq(elem.children.size, 0)
-//
-//		elem = parser.parseDoc("<html  />")
-//		verifyEq(elem.name, "html")
-//		verifyEq(elem.attrs.size, 0)
-//		verifyEq(elem.children.size, 0)
-//	}
+	Void testValidSimpleTag() {
+		elem := parser.parseDoc("<html></html>")
+		verifyEq(elem.name, "html")
+		verifyEq(elem.attrs.size, 0)
+		verifyEq(elem.children.size, 0)
+
+		elem = parser.parseDoc("<html  ></html>")
+		verifyEq(elem.name, "html")
+		verifyEq(elem.attrs.size, 0)
+		verifyEq(elem.children.size, 0)
+
+		elem = parser.parseDoc("<html/>")
+		verifyEq(elem.name, "html")
+		verifyEq(elem.attrs.size, 0)
+		verifyEq(elem.children.size, 0)
+
+		elem = parser.parseDoc("<html  />")
+		verifyEq(elem.name, "html")
+		verifyEq(elem.attrs.size, 0)
+		verifyEq(elem.children.size, 0)
+	}
 
 	Void testValidNestedTag() {
-//		elem := parser.parseDoc("<html><head></head></html>")
-//		verifyElemEq(elem, "<html><head/></html>")
-//		
-//		elem = parser.parseDoc("<html><head  ></head></html>")
-//		verifyElemEq(elem, "<html><head/></html>")
+		elem := parser.parseDoc("<html><head></head></html>")
+		verifyElemEq(elem, "<html><head/></html>")
 		
-		elem := parser.parseDoc("<html><head/></html>")
+		elem = parser.parseDoc("<html><head  ></head></html>")
+		verifyElemEq(elem, "<html><head/></html>")
+		
+		elem = parser.parseDoc("<html><head/></html>")
 		verifyElemEq(elem, "<html><head/></html>")
 		
 		elem = parser.parseDoc("<html><head  /></html>")

@@ -43,6 +43,23 @@ internal class SuccessCtx {
 			if (doc != null)
 				doc.root = openElement
 		} else {
+			
+			// this doesn't work as actions aren't called *during* the parse, only on success!
+//			if (tagName.equalsIgnoreCase("td")) {
+//				if (openElement.name.equalsIgnoreCase("td"))
+//					pushEndTag
+//			}
+//			if (tagName.equalsIgnoreCase("tr")) {
+//				if (openElement.name.equalsIgnoreCase("td")) {
+//					newTagName := tagName
+//					tagName = openElement.name
+//					pushEndTag
+//					tagName = newTagName
+//				}
+//				if (openElement.name.equalsIgnoreCase("tr"))
+//					pushEndTag
+//			}
+			
 			elem := XElem(tagName)
 			openElement.add(elem)
 			openElement = elem
