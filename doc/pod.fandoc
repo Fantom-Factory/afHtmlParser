@@ -52,7 +52,7 @@ It's pretty self explanatory!
 
 While Html Parser is more lenient than a validator it does *NOT* attempt to reconstruct documents from the tag soup of badly formatted HTML4 documents.
 
-It's main purpose is to parse HTML5 documents created with [Slim]`pod:afSlim` into XML so they may be tested by [Bounce]`pod:afBounce` and [Sizzle]`pod:afSizzle`.
+It's main purpose is to parse well formed HTML5 documents created with [Slim]`pod:afSlim` into XML so they may be tested by [Bounce]`pod:afBounce` and [Sizzle]`pod:afSizzle`.
 
 Html Parser uses [Pegger]`pod:afPegger` because [HTML can not be parsed with regular expressions]`http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454`.
 
