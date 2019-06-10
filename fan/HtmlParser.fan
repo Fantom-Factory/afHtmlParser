@@ -1,5 +1,6 @@
-using xml
 using afPegger
+using xml::XElem
+using concurrent::Actor
 
 ** Parses HTML strings into XML documents.
 @Js
@@ -11,19 +12,20 @@ class HtmlParser {
 	XElem parseDoc(Str html) {
 //	XElem parseDoc(Str html, [Str:Obj]? options := null) {
 		startTime := Duration.now
-		parser := Parser(htmlRules)
+		peg := Peg(html, htmlRules)
 		
 //		beLenient := options?.get("lenient") == true
-//		sctx := SuccessCtx() { it.beLenient = beLenient }
-		sctx := SuccessCtx()
-		matched := parser.matches(html.in, sctx)
+//		sctx  := SuccessCtx() { it.beLenient = beLenient }
+		sctx  := SuccessCtx()
+		Actor.locals["afHtmlParser.ctx"] = sctx
+		match := peg.match
 		
 		if (log.isDebug) {
 			millis := (Duration.now - startTime).toMillis.toLocale("#,000")		
 			log.debug("HTML parsed in ${millis}ms")
 		}
 		
-		if (!matched)
+		if (match == null)
 			throw ParseErr("Could not parse HTML: \n${html.toCode(null)}")
 		
 		return sctx.document.root

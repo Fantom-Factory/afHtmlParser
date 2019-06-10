@@ -19,9 +19,10 @@ class Build : BuildPod {
 		depends = [
 			"sys 1.0",
 			"xml 1.0",
+			"concurrent 1.0",
 
 			// ---- Core ------------------------
-			"afPegger 0.1.0 - 0.1"
+			"afPegger 0.2.0 - 0.2"
 		]
 	
 		srcDirs = [`fan/`, `test/`]
