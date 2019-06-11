@@ -170,35 +170,60 @@ internal class HtmlWalker {
 			case "voidElementName"				: pushTagName(m.matched)
 			case "rawTextElementName"			: pushTagName(m.matched)
 			case "escapableRawTextElementName"	: pushTagName(m.matched)
-			case "rawTextElementContent"		: pushText(m.matched)
-			case "rawText"						: pushText(m.matched)
-			case "escapableRawText"				: pushText(m.matched)
-			case "normalElementText"			: pushText(m.matched)
 
-//			case "unquotedAttribute"			: pushAttr
-//			case "attributeName"				: pushAttrName(m.matched)
-//			case "unquotedAttributeVal"			: pushAttrVal(m.matched)
-//			case "singleAttributeVal"			: pushAttrVal(m.matched)
-//			case "doubleAttributeVal"			: pushAttrVal(m.matched)
-//			case "emptyAttribute"				: pushAttrName(m.matched);pushAttrVal(m.matched); pushAttr
-//			case "singleAttribute"				: pushAttr
-//			case "doubleAttribute"				: pushAttr
+			case "rawTextElementContent"		: pushText(m.matched)
+			case "tagText"						: pushText(deEscapeText(m))
+			case "escapableRawTextElementContent"	: pushText(deEscapeText(m))
 
 			case "emptyAttr"					: attrElem.addAttr(m["attrName"].matched, m["attrName"].matched)
 			case "unquotedAttr"					:
 			case "singleQuoteAttr"				:
-			case "doubleQuoteAttr"				: attrElem.addAttr(m["attrName"].matched, m["attrValue"]?.matched ?: "")
+			case "doubleQuoteAttr"				: attrElem.addAttr(m["attrName"].matched, deEscapeText(m["attrValue"]))
 
-			case "namedCharRef"					: pushNomCharRef(m.matched)
-			case "decNumCharRef"				: pushDecCharRef(m.matched)
-			case "hexNumCharRef"				: pushHexCharRef(m.matched)
-			case "borkedRef"					: pushBorkedRef(m.matched)
 			case "cdata"						: pushCdata(m.matched)
 			
 			case "doctypeName"					: pushDoctype(m.matched)
 			case "publicId"						: pushPublicId(m.matched)
 			case "systemId"						: pushSystemId(m.matched)
 		}
+	}
+	
+	Str deEscapeText(Match? match) {
+		match?.matches?.join("") |m| {
+			if (m.name == "text")	return m.matched
+			if (m.name == "charRef") {
+				m = m.matches.first
+				text := m.matched
+				switch (m.name) {
+					case "text"				: return text
+					case "namedCharRef"		: return nomCharRef(text)
+					case "decNumCharRef"	: return text["&#".size..<-1].toInt(10).toChar
+					case "hexNumCharRef"	: return text["&#x".size..<-1].toInt(16).toChar
+					case "borkedRef"		: return text
+					default					: throw UnsupportedErr(m.name)
+				}
+			}
+			throw UnsupportedErr(m.name)
+		} ?: ""
+	}
+	
+	Str nomCharRef(Str text) {
+		// decode XML entities 
+		// leave HTML entities as they are 'cos XML don't understand them
+		if (text.equalsIgnoreCase("&lt;"))		text = "<"
+		if (text.equalsIgnoreCase("&gt;"))		text = ">"
+		if (text.equalsIgnoreCase("&amp;"))		text = "&"
+		if (text.equalsIgnoreCase("&apos;"))	text = "'"
+		if (text.equalsIgnoreCase("&quot;"))	text = "\""
+
+		// unmatched entities will throw an Unsupported Entity Err, 
+		// so lets be nice and decode some common cases
+		if (text.equalsIgnoreCase("&nbsp;"))	text = "\u00A0"
+		
+		// TODO: decode ALL entities as detailed at:
+		// http://www.w3.org/html/wg/drafts/html/CR/entities.json
+		// That's all 2332 of them!		
+		return text
 	}
 	
 	// ---------------------------------------------------------------------------
@@ -256,72 +281,72 @@ internal class HtmlWalker {
 	}
 
 	Void pushText(Str text) {
-//		if (openElement.children.last?.nodeType == XNodeType.text)
-//			// for mashing lots of char refs together
-//			((XText) openElement.children.last).val += text
+		if (openElement.children.last?.nodeType == XNodeType.text)
+			// for mashing lots of char refs together
+			((XText) openElement.children.last).val += text
+		else
+			openElement.add(XText(text))
+	}
+
+//	Void pushAttrName(Str name) {
+//		attrName = name
+//	}
+//
+//	Void pushAttrVal(Str val) {
+//		attrValue = (attrValue ?: Str.defVal) + val
+//	}
+//	
+//	Void pushAttr() {
+//		attrElem.addAttr(attrName, attrValue ?: Str.defVal)
+//		attrName = null
+//		attrValue = null
+//	}
+
+//	Void pushNomCharRef(Str text) {
+//		// decode XML entities 
+//		// leave HTML entities as they are 'cos XML don't understand them
+//		if (text.equalsIgnoreCase("&lt;"))		text = "<"
+//		if (text.equalsIgnoreCase("&gt;"))		text = ">"
+//		if (text.equalsIgnoreCase("&amp;"))		text = "&"
+//		if (text.equalsIgnoreCase("&apos;"))	text = "'"
+//		if (text.equalsIgnoreCase("&quot;"))	text = "\""
+//
+//		// unmatched entities will throw an Unsupported Entity Err, 
+//		// so lets be nice and decode some common cases
+//		if (text.equalsIgnoreCase("&nbsp;"))	text = "\u00A0"
+//		
+//		// TODO: decode ALL entities as detailed at:
+//		// http://www.w3.org/html/wg/drafts/html/CR/entities.json
+//		// That's all 2332 of them!
+//		
+//		if (attrName != null)
+//			pushAttrVal(text)
 //		else
-//			openElement.add(XText(text))
-	}
+//			pushText(text)
+//	}
 
-	Void pushAttrName(Str name) {
-		attrName = name
-	}
-
-	Void pushAttrVal(Str val) {
-		attrValue = (attrValue ?: Str.defVal) + val
-	}
+//	Void pushDecCharRef(Str text) {
+//		ref := text["&#".size..<-1].toInt(10).toChar
+//		if (attrName != null)
+//			pushAttrVal(ref)
+//		else
+//			pushText(ref)
+//	}
 	
-	Void pushAttr() {
-		attrElem.addAttr(attrName, attrValue ?: Str.defVal)
-		attrName = null
-		attrValue = null
-	}
+//	Void pushHexCharRef(Str text) {
+//		ref := text["&#x".size..<-1].toInt(16).toChar
+//		if (attrName != null)
+//			pushAttrVal(ref)
+//		else
+//			pushText(ref)
+//	}
 
-	Void pushNomCharRef(Str text) {
-		// decode XML entities 
-		// leave HTML entities as they are 'cos XML don't understand them
-		if (text.equalsIgnoreCase("&lt;"))		text = "<"
-		if (text.equalsIgnoreCase("&gt;"))		text = ">"
-		if (text.equalsIgnoreCase("&amp;"))		text = "&"
-		if (text.equalsIgnoreCase("&apos;"))	text = "'"
-		if (text.equalsIgnoreCase("&quot;"))	text = "\""
-
-		// unmatched entities will throw an Unsupported Entity Err, 
-		// so lets be nice and decode some common cases
-		if (text.equalsIgnoreCase("&nbsp;"))	text = "\u00A0"
-		
-		// TODO: decode ALL entities as detailed at:
-		// http://www.w3.org/html/wg/drafts/html/CR/entities.json
-		// That's all 2332 of them!
-		
-		if (attrName != null)
-			pushAttrVal(text)
-		else
-			pushText(text)
-	}
-
-	Void pushDecCharRef(Str text) {
-		ref := text["&#".size..<-1].toInt(10).toChar
-		if (attrName != null)
-			pushAttrVal(ref)
-		else
-			pushText(ref)
-	}
-	
-	Void pushHexCharRef(Str text) {
-		ref := text["&#x".size..<-1].toInt(16).toChar
-		if (attrName != null)
-			pushAttrVal(ref)
-		else
-			pushText(ref)
-	}
-
-	Void pushBorkedRef(Str text) {
-		if (attrName != null)
-			pushAttrVal(text)
-		else
-			pushText(text)
-	}
+//	Void pushBorkedRef(Str text) {
+//		if (attrName != null)
+//			pushAttrVal(text)
+//		else
+//			pushText(text)
+//	}
 
 	Void pushCdata(Str text) {
 		cdata := XText(text["<![CDATA[".size..<-"]]>".size])

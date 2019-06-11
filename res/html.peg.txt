@@ -4,6 +4,15 @@
 html                           <- bom? blurb* doctype? xmlProlog? blurb* element blurb*
 bom                            <- "﻿"
 xmlProlog                      <- "<?xml" (!"?>" .)+ "?>"
+
+// ---- Doctype ----
+
+doctype                        <- "<!DOCTYPE" [ \t]+ doctypeName:[a-zA-Z0-9]+ (doctypePublicId / doctypeSystemId)* [ \t]* ">"
+doctypePublicId                <- [ \t]+ "PUBLIC" [ \t]+ (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
+doctypeSystemId                <- [ \t]+ ("SYSTEM" [ \t]+)? (("\"" systemId:[^"]* "\"") / ("'" systemId:[^']* "'"))
+
+// ---- Elements ----
+
 element                        <- voidElement / rawTextElement / escapableRawTextElement / selfClosingElement / normalElement
 voidElement                    <- "<" voidElementName attributes ">"
 rawTextElement                 <- rawTextElementTag rawTextElementContent endTag
@@ -18,19 +27,22 @@ tagName                        <- ([a-zA-Z] [^\t\n\f />]*) [ \t]*
 voidElementName                <- ("area" / "base" / "br" / "col" / "embed" / "hr" / "img" / "input" / "keygen" / "link" / "meta" / "param" / "source" / "track" / "wbr") [ \t]*
 rawTextElementName             <- ("script" / "style") [ \t]*
 escapableRawTextElementName    <- ("textarea" / "title") [ \t]*
-rawTextElementContent          <- (!("</script>" / "</style>") .)+
-escapableRawTextElementContent <- (escapableRawText / charRef)*
-normalElementContent           <- !"</" (normalElementText / charRef / comment / cdata / element)*
-rawText                        <- (!("</script>" / "</style>") .)+
-escapableRawText               <- (!("</textarea>" / "</title>" / "&") .)+
-normalElementText              <- [^<&]+
-attributes                     <- (&[^/>] ([ \t] / doubleQuoteAttr / singleQuoteAttr / unquotedAttr / emptyAttr))*
 
+rawTextElementContent			<- (!("</script>" / "</style>") .)+
+escapableRawTextElementContent	<- (text:(!("</textarea>" / "</title>" / "&") .)+ / charRef)*
+normalElementContent			<- !"</" (tagText:(text:[^<&]+ / charRef) / comment / cdata / element)*
+rawText							<- (!("</script>" / "</style>") .)+
+
+// ---- Attributes ----
+
+attributes                     <- (&[^/>] ([ \t] / doubleQuoteAttr / singleQuoteAttr / unquotedAttr / emptyAttr))*
 attrName						<- [^ \t\n\r\f"'>/=]+
 emptyAttr						<- attrName+
 unquotedAttr					<- attrName [ \t]* "=" [ \t]* attrValue:(text:[^ \t\n\r\f"'=<>`&]+ / charRef)+
 singleQuoteAttr					<- attrName [ \t]* "=" [ \t]* "'" attrValue:(text:[^'&]+ / charRef)* "'"
 doubleQuoteAttr					<- attrName [ \t]* "=" [ \t]* "\"" attrValue:(text:[^"&]+ / charRef)* "\""
+
+// ---- Character References ----
 
 charRef							<- &"&" (decNumCharRef / hexNumCharRef / namedCharRef / borkedRef)
 namedCharRef					<- "&" [^;>]+ ";"
@@ -38,11 +50,8 @@ decNumCharRef					<- "&#" [0-9]+ ";"
 hexNumCharRef					<- "&#x" [a-fA-F0-9]+ ";"
 borkedRef						<- "&" &[ \t]
 
+// ---- Misc ----
+
 cdata                          <- "<![CDATA[" (!"]]>" .)+ "]]>"
 comment                        <- "<!--" (!"--" .)+ "-->"
-
-doctype                        <- "<!DOCTYPE" [ \t]+ doctypeName:[a-zA-Z0-9]+ (doctypePublicId / doctypeSystemId)* [ \t]* ">"
-doctypePublicId                <- [ \t]+ "PUBLIC" [ \t]+ (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
-doctypeSystemId                <- [ \t]+ ("SYSTEM" [ \t]+)? (("\"" systemId:[^"]* "\"") / ("'" systemId:[^']* "'"))
-
 blurb                          <- [ \t]+ / comment
