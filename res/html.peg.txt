@@ -17,16 +17,18 @@ element                        <- voidElement / rawTextElement / escapableRawTex
 voidElement                    <- "<" voidElementName attributes ">"
 rawTextElement                 <- rawTextElementTag rawTextElementContent endTag
 escapableRawTextElement        <- escapableRawTextElementTag escapableRawTextElementContent endTag
-selfClosingElement             <- "<" tagName attributes "/>"
+selfClosingElement             <- "<" elementName attributes "/>"
 normalElement                  <- startTag normalElementContent? endTag
+
 rawTextElementTag              <- "<" rawTextElementName attributes ">"
 escapableRawTextElementTag     <- "<" escapableRawTextElementName attributes ">"
-startTag                       <- "<" tagName attributes ">"
-endTag                         <- "</" tagName ">"
-tagName                        <- ([a-zA-Z] [^\t\n\f />]*) [ \t]*
-voidElementName                <- ("area" / "base" / "br" / "col" / "embed" / "hr" / "img" / "input" / "keygen" / "link" / "meta" / "param" / "source" / "track" / "wbr") [ \t]*
-rawTextElementName             <- ("script" / "style") [ \t]*
-escapableRawTextElementName    <- ("textarea" / "title") [ \t]*
+startTag                       <- "<" elementName attributes ">"
+endTag                         <- "</" elementName ">"
+
+elementName						<- [a-zA-Z] [^\t\n\f />]*
+voidElementName					<- "area" / "base" / "br" / "col" / "embed" / "hr" / "img" / "input" / "keygen" / "link" / "meta" / "param" / "source" / "track" / "wbr"
+rawTextElementName				<- "script" / "style"
+escapableRawTextElementName		<- "textarea" / "title"
 
 rawTextElementContent			<- (!("</script>" / "</style>") .)+
 escapableRawTextElementContent	<- (text:(!("</textarea>" / "</title>" / "&") .)+ / charRef)*
@@ -35,7 +37,7 @@ rawText							<- (!("</script>" / "</style>") .)+
 
 // ---- Attributes ----
 
-attributes                     <- (&[^/>] ([ \t] / doubleQuoteAttr / singleQuoteAttr / unquotedAttr / emptyAttr))*
+attributes						<- (&[^/>] ([ \t]+ / doubleQuoteAttr / singleQuoteAttr / unquotedAttr / emptyAttr))*
 attrName						<- [^ \t\n\r\f"'>/=]+
 emptyAttr						<- attrName+
 unquotedAttr					<- attrName [ \t]* "=" [ \t]* attrValue:(text:[^ \t\n\r\f"'=<>`&]+ / charRef)+
