@@ -1,6 +1,5 @@
 using afPegger
 using xml::XElem
-using concurrent::Actor
 
 ** Parses HTML strings into XML documents.
 @Js

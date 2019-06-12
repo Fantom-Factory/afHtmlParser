@@ -1,52 +1,96 @@
 using afPegger
-using concurrent::Actor
 using xml
 
-internal class HtmlWalker {
-	
+internal class HtmlWalker {	
+	private static const Log	log		:= HtmlWalker#.pod.log
+	private XDoc?				doc
+	private XElem?				elem
+	private Bool				beLenient
+
+	XDoc document() {
+		doc ?: XDoc(elem)
+	}
+
 	Void walk(Match match) {
 		stepIn(match)
 		match.matches.each { walk(it) }
 		stepOut(match)
 	}
 	
-	Void stepIn(Match m) {
+	private Void stepIn(Match m) {
 		switch (m.name) {
-			
+			case "doctypeName"				: doctype(m.matched)
+			case "publicId"					: publicId(m.matched)
+			case "systemId"					: systemId(m.matched)
+
+			case "startTag"					: startTag(m.matched)
+			case "endTag"					: endTag(m.matched)
+			case "voidTag"					: voidTagIn(m.matched)
+
+			case "tagText"					: pushText(deEscapeText(m))
+			case "rawTextContent"			: pushText(m.matched)
+			case "escapableRawTextContent"	: pushText(deEscapeText(m))
+
+			case "emptyAttr"				: elem.addAttr(m["attrName"].matched, m["attrName"].matched)
+			case "attr"						: elem.addAttr(m["attrName"].matched, deEscapeText(m["attrValue"]))
+
+			case "cdata"					: pushCdata(m.matched)
 		}
 	}
 	
-	Void stepOut(Match m) {
+	private Void stepOut(Match m) {
 		switch (m.name) {
-			case "voidElement"					: pushVoidTag
-			case "selfClosingElement"			: pushVoidTag
-			case "rawTextElementTag"			: pushStartTag
-			case "escapableRawTextElementTag"	: pushStartTag
-			case "startTag"						: pushStartTag
-			case "endTag"						: pushEndTag
-			case "elementName"					: pushTagName(m.matched)
-			case "voidElementName"				: pushTagName(m.matched)
-			case "rawTextElementName"			: pushTagName(m.matched)
-			case "escapableRawTextElementName"	: pushTagName(m.matched)
-
-			case "rawTextElementContent"		: pushText(m.matched)
-			case "tagText"						: pushText(deEscapeText(m))
-			case "escapableRawTextElementContent"	: pushText(deEscapeText(m))
-
-			case "emptyAttr"					: attrElem.addAttr(m["attrName"].matched, m["attrName"].matched)
-			case "unquotedAttr"					:
-			case "singleQuoteAttr"				:
-			case "doubleQuoteAttr"				: attrElem.addAttr(m["attrName"].matched, deEscapeText(m["attrValue"]))
-
-			case "cdata"						: pushCdata(m.matched)
-			
-			case "doctypeName"					: pushDoctype(m.matched)
-			case "publicId"						: pushPublicId(m.matched)
-			case "systemId"						: pushSystemId(m.matched)
+			case "voidTag"					: voidTagOut(m.matched)
 		}
 	}
 	
-	Str deEscapeText(Match? match) {
+	private Void doctype(Str name) {
+		doc = XDoc()
+		doc.docType = XDocType()
+		doc.docType.rootElem = name
+	}
+
+	private Void systemId(Str id) {
+		doc.docType.systemId = id.toUri
+	}
+	
+	private Void publicId(Str id) {
+		doc.docType.publicId = id
+	}
+	
+	private Void startTag(Str tagName) {
+		if (elem == null) {
+			elem = XElem(tagName)
+			if (doc != null)
+				doc.root = elem
+		} else {
+			elem := XElem(tagName)
+			this.elem.add(elem)
+			this.elem = elem
+		}
+	}
+	
+	private Void endTag(Str tagName) {
+		if (tagName != elem.name) {
+			msg := "End tag </${tagName}> does not match start tag <${elem.name}>"
+			if (beLenient)
+				 { log.warn(msg); return }
+			throw ParseErr(msg)
+		}
+
+		if (elem.parent?.nodeType == XNodeType.elem)
+			elem = elem.parent
+	}
+
+	private Void voidTagIn(Str tagName) {
+		startTag(tagName)
+	}
+	
+	private Void voidTagOut(Str tagName) {
+		endTag(tagName)
+	}
+
+	private Str deEscapeText(Match? match) {
 		match?.matches?.join("") |m| {
 			if (m.name == "text")	return m.matched
 			if (m.name == "charRef") {
@@ -65,7 +109,7 @@ internal class HtmlWalker {
 		} ?: ""
 	}
 	
-	Str nomCharRef(Str text) {
+	private Str nomCharRef(Str text) {
 		// decode XML entities 
 		// leave HTML entities as they are 'cos XML don't understand them
 		if (text.equalsIgnoreCase("&lt;"))		text = "<"
@@ -86,86 +130,17 @@ internal class HtmlWalker {
 	
 	// ---------------------------------------------------------------------------
 	
-	static const Log log		:= SuccessCtx#.pod.log
-	XElem[]			roots		:= XElem[,]	
-	XElem?			openElement
-	XElem			attrElem	:= XElem("attrs")
-	Str?			tagName
-	XDoc?			doc
-	Bool			beLenient
-	
-	Void pushDoctype(Str name) {
-		doc = XDoc()
-		doc.docType = XDocType()
-		doc.docType.rootElem = name
-	}
-
-	Void pushSystemId(Str id) {
-		doc.docType.systemId = id.toUri
-	}
-	
-	Void pushPublicId(Str id) {
-		doc.docType.publicId = id
-	}
-	
-	Void pushTagName(Str tagName) {
-		this.tagName = tagName.trimEnd
-	}
-	
-	Void pushVoidTag() {
-		pushStartTag
-		tagName = openElement.name
-		pushEndTag
-	}
-
-	Void pushStartTag() {
-		if (openElement == null) {
-			openElement = XElem(tagName)
-			roots.add(openElement)
-			if (doc != null)
-				doc.root = openElement
-		} else {
-			elem := XElem(tagName)
-			openElement.add(elem)
-			openElement = elem
-		}
-		
-		tagName = null
-		
-		attrElem.attrs.each { openElement.add(it) }
-		attrElem = XElem("attrs")
-	}
-
-	Void pushText(Str text) {
-		if (openElement.children.last?.nodeType == XNodeType.text)
+	private Void pushText(Str text) {
+		if (elem.children.last?.nodeType == XNodeType.text)
 			// for mashing lots of char refs together
-			((XText) openElement.children.last).val += text
+			((XText) elem.children.last).val += text
 		else
-			openElement.add(XText(text))
+			elem.add(XText(text))
 	}
 
-	Void pushCdata(Str text) {
+	private Void pushCdata(Str text) {
 		cdata := XText(text["<![CDATA[".size..<-"]]>".size])
 		cdata.cdata = true
-		openElement.add(cdata)
-	}
-	
-	Void pushEndTag() {
-		if (tagName != openElement.name) {
-			msg := "End tag </${tagName}> does not match start tag <${openElement.name}>"
-			if (beLenient) {
-				log.warn(msg)
-				return
-			}
-			throw ParseErr(msg)
-		}
-
-		if (openElement.parent?.nodeType != XNodeType.doc)
-			openElement = openElement.parent
-	}
-	
-	XDoc document() {
-		// TODO: check size of roots
-		doc ?: XDoc(roots.first)
+		elem.add(cdata)
 	}
 }

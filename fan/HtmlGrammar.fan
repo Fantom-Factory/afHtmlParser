@@ -8,7 +8,7 @@ class HtmlGrammar : Test {
 	}
 	
 	Void testG() {
-		HtmlGrammar().grammar		
+		HtmlGrammar().grammar.definition { echo(it) }		
 	}
 	
 	static Void main(Str[] args) {
