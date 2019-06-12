@@ -1,54 +1,54 @@
 
 // PEG Rules for parsing well formed HTML 5 documents 
 
-html						<- bom? blurb* doctype? xmlProlog? blurb* element blurb*
-bom							<- "﻿"
-xmlProlog					<- "<?xml" (!"?>" .)+ "?>"
+html				= bom? blurb* doctype? xmlProlog? blurb* elem blurb*
+bom					= "﻿"
+xmlProlog			= "<?xml" (!"?>" .)+ "?>"
 
 // ---- Doctype ----
 
-doctype						<- "<!DOCTYPE" [ \t]+ doctypeName:[a-zA-Z0-9]+ (doctypePublicId / doctypeSystemId)* [ \t]* ">"
-doctypePublicId				<- [ \t]+ "PUBLIC" [ \t]+ (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
-doctypeSystemId				<- [ \t]+ ("SYSTEM" [ \t]+)? (("\"" systemId:[^"]* "\"") / ("'" systemId:[^']* "'"))
+doctype				= "<!DOCTYPE" [ \t]+ doctypeElem:[a-zA-Z0-9]+ (doctypePublicId / doctypeSystemId)* [ \t]* ">"
+doctypePublicId		= [ \t]+ "PUBLIC" [ \t]+ (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
+doctypeSystemId		= [ \t]+ ("SYSTEM" [ \t]+)? (("\"" systemId:[^"]* "\"") / ("'" systemId:[^']* "'"))
 
-// ---- Elements ----
+// ---- Elems ----
 
-element						<- voidElement / rawTextElement / escapableRawTextElement / selfClosingElement / normalElement
-voidElement					<- "<"  voidTag:voidElementName attributes ">"
-rawTextElement				<- "<" startTag:rawTextElementName attributes ">" rawTextContent endElement
-escapableRawTextElement		<- "<" startTag:escapableRawTextElementName attributes ">" escapableRawTextContent endElement
-selfClosingElement			<- "<"  voidTag:elementName attributes "/>"
-normalElement				<- "<" startTag:elementName attributes ">" normalContent? endElement
-endElement					<- "</"  endTag:elementName ">"
+elem				= voidElem / rawTextElem / escRawTextElem / selfClosingElem / normalElem
+voidElem			= "<"  voidTag:voidElemName attributes ">"
+rawTextElem			= "<" startTag:rawTextElemName attributes ">" rawTextContent endElem
+escRawTextElem		= "<" startTag:escRawTextElemName attributes ">" escRawTextContent endElem
+selfClosingElem		= "<"  voidTag:elemName attributes "/>"
+normalElem			= "<" startTag:elemName attributes ">" normalContent? endElem
+endElem				= "</"  endTag:elemName ">"
 
-elementName					<- [a-zA-Z] [^\t\n\f />]*
-voidElementName				<- "area" / "base" / "br" / "col" / "embed" / "hr" / "img" / "input" / "keygen" / "link" / "meta" / "param" / "source" / "track" / "wbr"
-rawTextElementName			<- "script" / "style"
-escapableRawTextElementName	<- "textarea" / "title"
+elemName			= [a-zA-Z] [^\t\n\f />]*
+voidElemName		= "area" / "base" / "br" / "col" / "embed" / "hr" / "img" / "input" / "keygen" / "link" / "meta" / "param" / "source" / "track" / "wbr"
+rawTextElemName		= "script" / "style"
+escRawTextElemName	= "textarea" / "title"
 
-rawTextContent				<- (!("</script>" / "</style>") .)+
-escapableRawTextContent		<- (text:(!("</textarea>" / "</title>" / "&") .)+ / charRef)*
-normalContent				<- !"</" (tagText:(text:[^<&]+ / charRef) / comment / cdata / element)*
+rawTextContent		= (!("</script>" / "</style>") .)+
+escRawTextContent	= (text:(!("</textarea>" / "</title>" / "&") .)+ / charRef)*
+normalContent		= !"</" (tagText:(text:[^<&]+ / charRef) / comment / cdata / elem)*
 
 // ---- Attributes ----
 
-attributes					<- (&[^/>] ([ \t]+ / attr:doubleQuoteAttr / attr:singleQuoteAttr / attr:unquotedAttr / emptyAttr))*
-attrName					<- [^ \t\n\r\f"'>/=]+
-emptyAttr					<- attrName+
-unquotedAttr				<- attrName [ \t]* "=" [ \t]* attrValue:(text:[^ \t\n\r\f"'=<>`&]+ / charRef)+
-singleQuoteAttr				<- attrName [ \t]* "=" [ \t]* "'" attrValue:(text:[^'&]+ / charRef)* "'"
-doubleQuoteAttr				<- attrName [ \t]* "=" [ \t]* "\"" attrValue:(text:[^"&]+ / charRef)* "\""
+attributes			= (&[^/>] ([ \t]+ / attr:doubleQuoteAttr / attr:singleQuoteAttr / attr:unquotedAttr / emptyAttr))*
+attrName			= [^ \t\n\r\f"'>/=]+
+emptyAttr			= attrName+
+unquotedAttr		= attrName [ \t]* "=" [ \t]* attrValue:(text:[^ \t\n\r\f"'=<>`&]+ / charRef)+
+singleQuoteAttr		= attrName [ \t]* "=" [ \t]* "'" attrValue:(text:[^'&]+ / charRef)* "'"
+doubleQuoteAttr		= attrName [ \t]* "=" [ \t]* "\"" attrValue:(text:[^"&]+ / charRef)* "\""
 
 // ---- Character References ----
 
-charRef						<- &"&" (decNumCharRef / hexNumCharRef / namedCharRef / borkedRef)
-namedCharRef				<- "&" [^;>]+ ";"
-decNumCharRef				<- "&#" [0-9]+ ";"
-hexNumCharRef				<- "&#x" [a-fA-F0-9]+ ";"
-borkedRef					<- "&" &[ \t]
+charRef				= &"&" (decNumCharRef / hexNumCharRef / namedCharRef / borkedRef)
+namedCharRef		= "&" [^;>]+ ";"
+decNumCharRef		= "&#" [0-9]+ ";"
+hexNumCharRef		= "&#x" [a-fA-F0-9]+ ";"
+borkedRef			= "&" &[ \t]
 
 // ---- Misc ----
 
-cdata						<- "<![CDATA[" (!"]]>" .)+ "]]>"
-comment						<- "<!--" (!"--" .)+ "-->"
-blurb						<- [ \t]+ / comment
+cdata				= "<![CDATA[" (!"]]>" .)+ "]]>"
+comment				= "<!--" (!"--" .)+ "-->"
+blurb				= [ \t]+ / comment

@@ -1,46 +1,57 @@
-using afPegger
-using xml
+using afPegger::Match
+using xml::XDoc
+using xml::XDocType
+using xml::XNodeType
+using xml::XElem
+using xml::XText
 
-internal class HtmlWalker {	
-	private static const Log	log		:= HtmlWalker#.pod.log
+@Js
+internal class HtmlMatchWalker {	
+	private static const Log	log		:= HtmlParser#.pod.log
 	private XDoc?				doc
 	private XElem?				elem
 	private Bool				beLenient
 
-	XDoc document() {
-		doc ?: XDoc(elem)
+	XElem docRoot() {
+		// ensure there's a XDoc attached to the root 
+		(doc ?: XDoc(elem)).root
 	}
 
-	Void walk(Match match) {
+	This walk(Match match) {
+		go(match)
+		return this
+	}
+	
+	private Void go(Match match) {
 		stepIn(match)
-		match.matches.each { walk(it) }
+		match.matches.each { go(it) }
 		stepOut(match)
 	}
 	
 	private Void stepIn(Match m) {
 		switch (m.name) {
-			case "doctypeName"				: doctype(m.matched)
-			case "publicId"					: publicId(m.matched)
-			case "systemId"					: systemId(m.matched)
+			case "doctypeElem"			: doctype (m.matched)
+			case "publicId"				: publicId(m.matched)
+			case "systemId"				: systemId(m.matched)
 
-			case "startTag"					: startTag(m.matched)
-			case "endTag"					: endTag(m.matched)
-			case "voidTag"					: voidTagIn(m.matched)
+			case "startTag"				: startTag(m.matched)
+			case "endTag"				: endTag  (m.matched)
+			case "voidTag"				: startTag(m.matched)
 
-			case "tagText"					: pushText(deEscapeText(m))
-			case "rawTextContent"			: pushText(m.matched)
-			case "escapableRawTextContent"	: pushText(deEscapeText(m))
+			case "tagText"				: addText(deEscapeText(m))
+			case "rawTextContent"		: addText(m.matched)
+			case "escRawTextContent"	: addText(deEscapeText(m))
 
-			case "emptyAttr"				: elem.addAttr(m["attrName"].matched, m["attrName"].matched)
-			case "attr"						: elem.addAttr(m["attrName"].matched, deEscapeText(m["attrValue"]))
+			case "emptyAttr"			: elem.addAttr(m["attrName"].matched, m["attrName"].matched)
+			case "attr"					: elem.addAttr(m["attrName"].matched, deEscapeText(m["attrValue"]))
 
-			case "cdata"					: pushCdata(m.matched)
+			case "cdata"				: cdata(m.matched)
 		}
 	}
 	
 	private Void stepOut(Match m) {
 		switch (m.name) {
-			case "voidTag"					: voidTagOut(m.matched)
+			case "voidTag"				: endTag(m.matched)
 		}
 	}
 	
@@ -82,14 +93,6 @@ internal class HtmlWalker {
 			elem = elem.parent
 	}
 
-	private Void voidTagIn(Str tagName) {
-		startTag(tagName)
-	}
-	
-	private Void voidTagOut(Str tagName) {
-		endTag(tagName)
-	}
-
 	private Str deEscapeText(Match? match) {
 		match?.matches?.join("") |m| {
 			if (m.name == "text")	return m.matched
@@ -128,9 +131,7 @@ internal class HtmlWalker {
 		return text
 	}
 	
-	// ---------------------------------------------------------------------------
-	
-	private Void pushText(Str text) {
+	private Void addText(Str text) {
 		if (elem.children.last?.nodeType == XNodeType.text)
 			// for mashing lots of char refs together
 			((XText) elem.children.last).val += text
@@ -138,7 +139,7 @@ internal class HtmlWalker {
 			elem.add(XText(text))
 	}
 
-	private Void pushCdata(Str text) {
+	private Void cdata(Str text) {
 		cdata := XText(text["<![CDATA[".size..<-"]]>".size])
 		cdata.cdata = true
 		elem.add(cdata)
