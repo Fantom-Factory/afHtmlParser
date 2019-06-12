@@ -1,8 +1,9 @@
-#HTML Parser v0.1.2
+# HTML Parser v0.2.0
 ---
+
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)
-[![pod: v0.1.2](http://img.shields.io/badge/pod-v0.1.2-yellow.svg)](http://www.fantomfactory.org/pods/afHtmlParser)
-![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
+[![pod: v0.2.0](http://img.shields.io/badge/pod-v0.2.0-yellow.svg)](http://eggbox.fantomfactory.org/pods/afHtmlParser)
+[![Licence: ISC](http://img.shields.io/badge/licence-ISC-blue.svg)](https://choosealicense.com/licenses/isc/)
 
 ## Overview
 
@@ -41,17 +42,17 @@ Other:
 
 ## Install
 
-Install `HTML Parser` with the Fantom Pod Manager ( [FPM](http://pods.fantomfactory.org/pods/afFpm) ):
+Install `HTML Parser` with the Fantom Pod Manager ( [FPM](http://eggbox.fantomfactory.org/pods/afFpm) ):
 
     C:\> fpm install afHtmlParser
 
 Or install `HTML Parser` with [fanr](http://fantom.org/doc/docFanr/Tool.html#install):
 
-    C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afHtmlParser
+    C:\> fanr install -r http://eggbox.fantomfactory.org/fanr/ afHtmlParser
 
 To use in a [Fantom](http://fantom-lang.org/) project, add a dependency to `build.fan`:
 
-    depends = ["sys 1.0", ..., "afHtmlParser 0.1"]
+    depends = ["sys 1.0", ..., "afHtmlParser 0.2"]
 
 ## Documentation
 
@@ -60,6 +61,8 @@ Full API & fandocs are available on the [Eggbox](http://eggbox.fantomfactory.org
 ## Quick Start
 
 ```
+using afHtmlParser::HtmlParser
+
 class Example {
     Void main() {
         elem := HtmlParser().parseDoc("<input disabled value=wotever>")
@@ -71,13 +74,13 @@ class Example {
 
 ## Usage
 
-1 class - 1 method - 1 argument - 1 return value.
+    1 class -> 1 method -> 1 argument -> 1 return value.
 
 It's pretty self explanatory!
 
 While Html Parser is more lenient than a validator it does *NOT* attempt to reconstruct documents from the tag soup of badly formatted HTML4 documents.
 
-It's main purpose is to parse HTML5 documents created with [Slim](http://pods.fantomfactory.org/pods/afSlim) into XML so they may be tested by [Bounce](http://pods.fantomfactory.org/pods/afBounce) and [Sizzle](http://pods.fantomfactory.org/pods/afSizzle).
+It's main purpose is to parse well formed HTML5 documents created with [Slim](http://eggbox.fantomfactory.org/pods/afSlim) into XML so they may be tested by [Bounce](http://eggbox.fantomfactory.org/pods/afBounce) and [Sizzle](http://eggbox.fantomfactory.org/pods/afSizzle).
 
-Html Parser uses [Pegger](http://pods.fantomfactory.org/pods/afPegger) because [HTML can not be parsed with regular expressions](http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454).
+Html Parser uses [Pegger](http://eggbox.fantomfactory.org/pods/afPegger) because [HTML can not be parsed with regular expressions](http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454).
 

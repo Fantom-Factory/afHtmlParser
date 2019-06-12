@@ -10,7 +10,6 @@ class Build : BuildPod {
 
 		meta = [
 			"pod.dis"			: "HTML Parser",
-			"pod.displayName"	: "HTML Parser",
 			"repo.internal"		: "true",
 			"repo.tags"			: "templating, web",
 			"repo.public"		: "true"
@@ -21,7 +20,7 @@ class Build : BuildPod {
 			"xml 1.0",
 
 			// ---- Core ------------------------
-			"afPegger 0.2.0 - 0.2"
+			"afPegger 1.0.0 - 1.0"
 		]
 	
 		srcDirs = [`fan/`, `test/`]

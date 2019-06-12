@@ -32,6 +32,7 @@ Quick Start
 ***********
 pre>
 syntax: fantom
+using afHtmlParser::HtmlParser
 
 class Example {
     Void main() {
@@ -46,7 +47,7 @@ class Example {
 
 Usage [#usage]
 **************
-1 class - 1 method - 1 argument - 1 return value.
+  1 class -> 1 method -> 1 argument -> 1 return value.
 
 It's pretty self explanatory!
 
