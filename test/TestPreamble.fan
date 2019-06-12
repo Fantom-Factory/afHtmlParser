@@ -1,10 +1,16 @@
 using xml
+using afPegger
 
 @Js
 internal class TestPreamble : HtmlParserTest {
 	
 	Void testPreabmle() {
-		elem := parser.parseDoc("\uFEFF <!-- com --> \t <!-- com --> <!DOCTYPE wotever> <!-- com --> \t <!-- com --> <html/> <!-- com --> \t <!-- com --> ")
+		elem := null as XElem
+		
+		elem = parser.parseDoc("\uFEFF<html/>")
+		verifyElemEq(elem, "<html/>")
+		
+		elem = parser.parseDoc("\uFEFF <!-- com --> \t <!-- com --> <!DOCTYPE wotever> <!-- com --> \t <!-- com --> <html/> <!-- com --> \t <!-- com --> ")
 		verifyElemEq(elem, "<html/>")
 		verifyEq(elem.doc.docType.rootElem, "wotever")
 

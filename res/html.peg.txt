@@ -2,7 +2,7 @@
 // PEG Rules for parsing well formed HTML 5 documents 
 
 html				= bom? blurb* doctype? xmlProlog? blurb* elem blurb*
-bom					= "﻿"
+bom					= "\uFEFF"
 xmlProlog			= "<?xml" (!"?>" .)+ "?>"
 
 // ---- Doctype ----
