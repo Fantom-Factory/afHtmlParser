@@ -4,8 +4,6 @@ using xml
 @Js
 internal class TestTags : HtmlParserTest {
 	
-	HtmlParser parser := HtmlParser()
-
 	Void testValidSimpleTag() {
 		elem := parser.parseDoc("<html></html>")
 		verifyEq(elem.name, "html")

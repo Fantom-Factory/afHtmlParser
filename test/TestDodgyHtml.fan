@@ -4,8 +4,6 @@ using xml
 @Js
 internal class TestDodgyHtml : HtmlParserTest {
 	
-	HtmlParser parser := HtmlParser()
-
 	// https://www.w3.org/TR/html-markup/tr.html#tr-tags
 	// A tr element’s end tag may be omitted if the tr element is immediately followed by another tr element, or if there is no more content in the parent element.
 	Void testNonClosingTrTags() {

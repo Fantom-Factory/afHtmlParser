@@ -3,6 +3,9 @@ using xml
 @Js
 internal class HtmlParserTest : Test {
 
+	static const Unsafe	parserRef := Unsafe(HtmlParser())
+	static HtmlParser	parser() { parserRef.val }
+
 //	override Void setup() {
 //		PegCtx#.pod.log.level = LogLevel.debug
 //	}

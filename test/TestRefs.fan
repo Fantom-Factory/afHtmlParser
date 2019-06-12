@@ -3,7 +3,6 @@ using xml
 @Js
 internal class TestRefs : HtmlParserTest {
 	
-	HtmlParser	parser := HtmlParser()
 	XElem?		elem
 	
 	Void testRefs() {

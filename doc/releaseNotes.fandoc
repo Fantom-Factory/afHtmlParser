@@ -1,5 +1,8 @@
 Versions
 ********
+v0.2.0
+======
+ - Chg: Re-written with [Pegger 1.0]`pod:afPegger`.
 
 v0.1.2
 ======

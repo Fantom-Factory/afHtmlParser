@@ -3,8 +3,6 @@ using xml
 @Js
 internal class TestPreamble : HtmlParserTest {
 	
-	HtmlParser 	parser := HtmlParser()
-	
 	Void testPreabmle() {
 		elem := parser.parseDoc("\uFEFF <!-- com --> \t <!-- com --> <!DOCTYPE wotever> <!-- com --> \t <!-- com --> <html/> <!-- com --> \t <!-- com --> ")
 		verifyElemEq(elem, "<html/>")

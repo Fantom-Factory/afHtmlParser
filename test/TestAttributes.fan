@@ -4,7 +4,6 @@ using xml
 internal class TestAttributes : HtmlParserTest {
 	
 	XElem?		elem
-	HtmlParser 	parser := HtmlParser()
 	
 	Void testEmptyAttributes() {
 		elem := parser.parseDoc("<div empty></div>")

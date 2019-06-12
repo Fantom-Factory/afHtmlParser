@@ -1,9 +1,9 @@
 
 @Js
-class TestExample : Test {
+internal class TestExample : HtmlParserTest {
 	
 	Void testExample() {
-		elem := HtmlParser().parseDoc("<input disabled value=wotever>")
+		elem := parser.parseDoc("<input disabled value=wotever>")
 		echo(elem.writeToStr)	// --> <input disabled='disabled' value='wotever'/>
 	}
 }

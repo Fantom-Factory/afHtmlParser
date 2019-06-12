@@ -4,7 +4,6 @@ using xml
 internal class TestDoctype : HtmlParserTest {
 	
 	XDocType?	docType
-	HtmlParser 	parser := HtmlParser()
 	
 	Void testStandardDoctype() {
 		docType = parser.parseDoc("<div />").doc.docType

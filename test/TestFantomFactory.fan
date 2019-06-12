@@ -5,9 +5,9 @@ internal class TestFantomFactory : HtmlParserTest {
 	Void testFfWebSite() {
 //		afPegger::Parser#.pod.log.level = LogLevel.debug
 
-		HtmlParser().parseDoc(fantomFactoryIndex)
-		HtmlParser().parseDoc(fantomFactoryPodAtom)
-		HtmlParser().parseDoc(dekxaPromo)
+		parser.parseDoc(fantomFactoryIndex)
+		parser.parseDoc(fantomFactoryPodAtom)
+		parser.parseDoc(dekxaPromo)
 	}
 	
 	Str fantomFactoryIndex := 

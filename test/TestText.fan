@@ -3,7 +3,6 @@ using xml
 @Js
 internal class TestText : HtmlParserTest {
 	
-	HtmlParser	parser := HtmlParser()
 	XElem?		elem
 	
 	Void testRawText() {
