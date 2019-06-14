@@ -7,10 +7,10 @@ using xml::XText
 
 @Js
 internal class HtmlMatchWalker {	
-	private static const Log	log		:= HtmlParser#.pod.log
+	private static const Log	log			:= HtmlParser#.pod.log
 	private XDoc?				doc
 	private XElem?				elem
-	private Bool				beLenient
+	private Str[]				dodgyTags	:= "p tr td".split
 
 	XElem docRoot() {
 		// ensure there's a XDoc attached to the root 
@@ -75,6 +75,11 @@ internal class HtmlMatchWalker {
 			if (doc != null)
 				doc.root = elem
 		} else {
+			while (dodgyTags.contains(tagName) && elem.name == tagName) {
+				if (elem.parent?.nodeType == XNodeType.elem)
+					elem = elem.parent
+			}
+
 			elem := XElem(tagName)
 			this.elem.add(elem)
 			this.elem = elem
@@ -82,11 +87,10 @@ internal class HtmlMatchWalker {
 	}
 	
 	private Void endTag(Str tagName) {
-		if (tagName != elem.name) {
-			msg := "End tag </${tagName}> does not match start tag <${elem.name}>"
-			if (beLenient)
-				 { log.warn(msg); return }
-			throw ParseErr(msg)
+		while (tagName != elem.name) {
+			if (!dodgyTags.contains(elem.name))
+				throw ParseErr("End tag </${tagName}> does not match start tag <${elem.name}>")
+			elem = elem.parent
 		}
 
 		if (elem.parent?.nodeType == XNodeType.elem)

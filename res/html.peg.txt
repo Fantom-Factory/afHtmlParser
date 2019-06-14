@@ -18,7 +18,7 @@ voidElem			= "<"  voidTag:voidElemName attributes ">"
 rawTextElem			= "<" startTag:rawTextElemName attributes ">" rawTextContent endElem
 escRawTextElem		= "<" startTag:escRawTextElemName attributes ">" escRawTextContent endElem
 selfClosingElem		= "<"  voidTag:elemName attributes "/>"
-normalElem			= "<" startTag:elemName attributes ">" normalContent? endElem
+normalElem			= "<" startTag:elemName attributes ">" normalContent? endElem?
 endElem				= "</"  endTag:elemName ">"
 
 elemName			= [a-zA-Z] [^\t\n\f />]*
