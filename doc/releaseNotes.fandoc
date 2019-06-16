@@ -1,9 +1,18 @@
-Versions
-********
+v0.2
+****
+v0.2.2
+======
+ - New: Can parse HTML with missed end-tags for '<p>', '<tr>', & '<td>'.
+ - Chg: Updated to [Pegger 1.1]`pod:afPegger`.
+
 v0.2.0
 ======
  - Chg: Re-written with [Pegger 1.0]`pod:afPegger`.
 
+
+
+v0.1
+****
 v0.1.2
 ======
  - Chg: More lenient doctype parsing.
