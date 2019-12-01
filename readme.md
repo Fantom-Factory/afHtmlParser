@@ -1,8 +1,8 @@
-# HTML Parser v0.2.2
+# HTML Parser v0.2.4
 ---
 
-[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)
-[![pod: v0.2.2](http://img.shields.io/badge/pod-v0.2.2-yellow.svg)](http://eggbox.fantomfactory.org/pods/afHtmlParser)
+[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](https://fantom-lang.org/)
+[![pod: v0.2.4](http://img.shields.io/badge/pod-v0.2.4-yellow.svg)](http://eggbox.fantomfactory.org/pods/afHtmlParser)
 [![Licence: ISC](http://img.shields.io/badge/licence-ISC-blue.svg)](https://choosealicense.com/licenses/isc/)
 
 ## Overview
@@ -15,64 +15,65 @@ Html Parser currently recognises and supports:
 
 Elements:
 
-- Normal elements: `<div></div>`
-- Void elements: `<br>`
-- Self closing elements: `<foreignElement />`
-- Raw text elements: `<script> ... </script>`
-- Escapable raw text elements: `<textarea> ... </textarea>`
+* Normal elements: `<div></div>`
+* Void elements: `<br>`
+* Self closing elements: `<foreignElement />`
+* Raw text elements: `<script> ... </script>`
+* Escapable raw text elements: `<textarea> ... </textarea>`
+
 
 Attributes:
 
-- Empty attributes: `<input disabled>`
-- Unquoted attributes: `<input type=submit>`
-- Single quoted attributes: <input type='submit'>
-- Double quoted attributes: `<input type="submit">`
+* Empty attributes: `<input disabled>`
+* Unquoted attributes: `<input type=submit>`
+* Single quoted attributes: <input type='submit'>
+* Double quoted attributes: `<input type="submit">`
+
 
 Other:
 
-- XML declarations: `<?xml version="1.0" ?>`
-- DocTypes: `<!DOCTYPE html >`
-- Comments: `<!-- comment -->`
-- CData Sections: `<![CDATA[ cdata ]]>`
-- Numerical character references: `&#160;` and `&#xA0;`
-
-  > *Html Parser* because only *Chuck Norris* can parse HTML with regular expressions.
-
+* XML declarations: `<?xml version="1.0" ?>`
+* DocTypes: `<!DOCTYPE html >`
+* Comments: `<!-- comment -->`
+* CData Sections: `<![CDATA[ cdata ]]>`
+* Numerical character references: `&#160;` and `&#xA0;`> 
+    *Html Parser* because only *Chuck Norris* can parse HTML with regular expressions.
 
 
-## Install
+
+
+## <a name="Install"></a>Install
 
 Install `HTML Parser` with the Fantom Pod Manager ( [FPM](http://eggbox.fantomfactory.org/pods/afFpm) ):
 
     C:\> fpm install afHtmlParser
 
-Or install `HTML Parser` with [fanr](http://fantom.org/doc/docFanr/Tool.html#install):
+Or install `HTML Parser` with [fanr](https://fantom.org/doc/docFanr/Tool.html#install):
 
     C:\> fanr install -r http://eggbox.fantomfactory.org/fanr/ afHtmlParser
 
-To use in a [Fantom](http://fantom-lang.org/) project, add a dependency to `build.fan`:
+To use in a [Fantom](https://fantom-lang.org/) project, add a dependency to `build.fan`:
 
     depends = ["sys 1.0", ..., "afHtmlParser 0.2"]
 
-## Documentation
+## <a name="documentation"></a>Documentation
 
 Full API & fandocs are available on the [Eggbox](http://eggbox.fantomfactory.org/pods/afHtmlParser/) - the Fantom Pod Repository.
 
 ## Quick Start
 
-```
-using afHtmlParser::HtmlParser
-
-class Example {
-    Void main() {
-        elem := HtmlParser().parseDoc("<input disabled value=wotever>")
-
-        echo(elem.writeToStr)   // --> <input disabled='disabled' value='wotever'/>
+    using afHtmlParser::HtmlParser
+    
+    class Example {
+        Void main() {
+            elem := HtmlParser().parseDoc("<input disabled value=wotever>")
+    
+            echo(elem.writeToStr)   // --> <input disabled='disabled' value='wotever'/>
+        }
     }
-}
-```
+    
 
-## Usage
+## <a name="usage"></a>Usage
 
     1 class -> 1 method -> 1 argument -> 1 return value.
 
