@@ -32,7 +32,7 @@ internal class TestTags : HtmlParserTest {
 		
 		elem = parser.parseDoc("<html><head  ></head></html>")
 		verifyElemEq(elem, "<html><head/></html>")
-		
+
 		elem = parser.parseDoc("<html><head/></html>")
 		verifyElemEq(elem, "<html><head/></html>")
 		
@@ -58,8 +58,8 @@ internal class TestTags : HtmlParserTest {
 		elem = parser.parseDoc("<html><meta  ><img  ></html>")
 		verifyElemEq(elem, "<html><meta/><img/></html>")
 		
-		elem = parser.parseDoc("<html><meta  ><img src='test'  ></html>")
-		verifyElemEq(elem, "<html><meta/><img src='test'/></html>")
+		elem = parser.parseDoc("<html><meta a=b ><img src='test'  ></html>")
+		verifyElemEq(elem, "<html><meta a='b'/><img src='test'/></html>")
 	}
 
 	Void testRawTextTags() {

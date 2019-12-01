@@ -51,7 +51,10 @@ internal class HtmlMatchWalker {
 	
 	private Void stepOut(Match m) {
 		switch (m.name) {
-			case "voidTag"				: endTag(m.matched)
+			// yes - this IS voidElem and NOT voidTag - check TestTags::testVoidTags()
+			case "voidElem"				: endTag(null)
+			// which is why we also need to add this guy...
+			case "selfClosingElem"		: endTag(null)
 		}
 	}
 	
@@ -86,8 +89,8 @@ internal class HtmlMatchWalker {
 		}
 	}
 	
-	private Void endTag(Str tagName) {
-		while (tagName != elem.name) {
+	private Void endTag(Str? tagName) {
+		while (tagName != null && tagName != elem.name) {
 			if (!dodgyTags.contains(elem.name))
 				throw ParseErr("End tag </${tagName}> does not match start tag <${elem.name}>")
 			elem = elem.parent

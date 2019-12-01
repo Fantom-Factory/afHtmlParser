@@ -9,11 +9,7 @@ class HtmlParser {
 	
 	** Parses the given HTML string into an XML document.
 	XElem parseDoc(Str html) {
-		peg		:= Peg(html, grammar["html"])
-		match	:= peg.match
-		
-		if (match == null)
-			throw ParseErr("Could not parse HTML")
+		match := grammar["html"].match(html) ?: throw ParseErr("Could not parse HTML")
 		
 //		match.dump
 		return HtmlMatchWalker().walk(match).docRoot
