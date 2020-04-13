@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bounce Form Test</title>
+</head>
+<body>
+	<h1 id="head1" class="very">Bounce Form Test</h1>
+	<p>This page exists so <a href="/bounce">Bounce</a> form elements can be tested in a round trip fashion to BedSheet.</p>
+	<p id="p" class="good see">Hello!</p>
+	
+	<div id="elemTest1">Hello!</div>
+	
+	<input id="formless" name="formless" type="text" value="Orphaned"/>
+	
+<div id="elemTest2">Hello
+	<span> Mum</span>
+!</div>
+	
+	<form id="formId" action="/printForm" method="post">
+		<input id="textbox" name="textbox" type="text" value="Dimethyltryptamine"/>
+		
+		<textarea id="textarea" name="textarea">
+			Piperazines
+		</textarea>
+		
+		<input id="checkbox" name="checkbox" type="checkbox" checked="pma"/>
+
+		<input id="hidden" name="hidden" type="hidden" value="Gabapentin"/>
+		
+		<select id="selectbox" name="selectbox">
+			<option value="hawk">Hawk Dude</option>
+			<option value="herb" selected="selected">Herb Dude</option>
+			<option value="hash">Hash Dude</option>
+		</select>
+	
+		<input id="m1" name="Mescaline" type="radio" value="Water"/>
+		<input id="m2" name="Mescaline" type="radio" value="Beer" checked="checked"/>
+		<input id="m3" name="Mescaline" type="radio" value="Wine"/> 
+	
+		<input id="submit" name="submit" type="submit" value="Desoxypipradrol"/>
+		<input id="imgSubmit" name="submit" type="image" value="1"/>
+		<button id="btnSubmit" name="submit" type="submit" value="2"/>
+		
+		<input id="submitAlt" name="submit" type="submit" value="dex" formaction="/printFormAlt" formmethod="get" />
+	</form>
+	<div>
+		<input id="submitAlt2" name="submit" type="submit" value="dex2" form="formId" />
+		<input id="submitAlt3" name="submit" type="submit" form="formId" />
+		<input id="submitAlt4" name="submit" type="submit" form="formOops" />
+	</div>
+</body>
+</html>

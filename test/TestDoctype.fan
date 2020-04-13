@@ -9,6 +9,11 @@ internal class TestDoctype : HtmlParserTest {
 		docType = parser.parseDoc("<div />").doc.docType
 		verifyEq(docType, null)
 
+		docType = parser.parseDoc("<!DOCTYPE html>\n<html></html>").doc.docType
+		verifyEq(docType.rootElem, "html")
+		verifyEq(docType.publicId, null)
+		verifyEq(docType.systemId, null)
+
 		docType = parser.parseDoc("<!DOCTYPE hTmL> <html/>").doc.docType
 		verifyEq(docType.rootElem, "hTmL")
 		verifyEq(docType.publicId, null)

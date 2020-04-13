@@ -1,7 +1,7 @@
 
 // PEG Rules for parsing well formed HTML 5 documents 
 
-html				= bom? blurb* doctype? xmlProlog? blurb* elem blurb*
+html				= bom? blurb* doctype? blurb* xmlProlog? blurb* elem blurb*
 bom					= "\uFEFF"
 xmlProlog			= "<?xml" (!"?>" .)+ "?>"
 
@@ -51,4 +51,4 @@ borkedRef			= "&" &[ \t]
 
 cdata				= "<![CDATA[" (!"]]>" .)+ "]]>"
 comment				= "<!--" (!"--" .)+ "-->"
-blurb				= [ \t]+ / comment
+blurb				= [ \t\n]+ / comment

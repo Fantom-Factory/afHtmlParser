@@ -15,7 +15,7 @@ class HtmlParser {
 		return HtmlMatchWalker().walk(match).docRoot
 	}
 	
-	** Returns the grammar used to parse HTML.
+	** Returns the PEG grammar used to parse HTML.
 	Grammar grammar() {
 		if (_grammar == null) {
 			grammar := `fan://afHtmlParser/res/html.peg.txt`.toFile.readAllStr

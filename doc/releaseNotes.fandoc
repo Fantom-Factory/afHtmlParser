@@ -1,5 +1,9 @@
 v0.2
 ****
+v0.2.6
+======
+ - Bug: New lines after DOCTYPEs could not be parsed.
+
 v0.2.4
 ======
  - Bug: Attributes on Void tags were being added to their parent elements. Thanks go to Big Top Games for reporting.
