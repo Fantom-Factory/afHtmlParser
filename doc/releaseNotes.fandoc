@@ -1,5 +1,9 @@
 v0.2
 ****
+v0.2.8
+======
+ - Bug: Could not parse DOCTYPEs with new line chars.
+
 v0.2.6
 ======
  - Bug: New lines after DOCTYPEs could not be parsed.

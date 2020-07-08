@@ -51,4 +51,4 @@ borkedRef			= "&" &[ \t]
 
 cdata				= "<![CDATA[" (!"]]>" .)+ "]]>"
 comment				= "<!--" (!"--" .)+ "-->"
-blurb				= [ \t\n]+ / comment
+blurb				= [ \t\n\f\r]+ / comment
