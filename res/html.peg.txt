@@ -7,9 +7,9 @@ xmlProlog			= "<?xml" (!"?>" .)+ "?>"
 
 // ---- Doctype ----
 
-doctype				= "<!DOCTYPE" [ \t]+ doctypeElem:[a-zA-Z0-9]+ (doctypePublicId / doctypeSystemId)* [ \t]* ">"
-doctypePublicId		= [ \t]+ "PUBLIC" [ \t]+ (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
-doctypeSystemId		= [ \t]+ ("SYSTEM" [ \t]+)? (("\"" systemId:[^"]* "\"") / ("'" systemId:[^']* "'"))
+doctype				= "<!DOCTYPE" [ \t\n\f\r]+ doctypeElem:[a-zA-Z0-9]+ (doctypePublicId / doctypeSystemId)* [ \t\n\f\r]* ">"
+doctypePublicId		= [ \t\n\f\r]+ "PUBLIC" [ \t\n\f\r]+ (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
+doctypeSystemId		= [ \t\n\f\r]+ ("SYSTEM" [ \t\n\f\r]+)? (("\"" systemId:[^"]* "\"") / ("'" systemId:[^']* "'"))
 
 // ---- Elems ----
 

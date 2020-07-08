@@ -44,4 +44,21 @@ internal class TestDoctype : HtmlParserTest {
 		verifyEq(docType.publicId, "-//W3C//DTD XHTML 1.0 Transitional//EN")
 		verifyEq(docType.systemId, `http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd`)
 	}
+	
+	Void testDoctypeLineSplitBug() {
+		docType = parser.parseDoc("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"> <html/>").doc.docType
+		verifyEq(docType.rootElem, "html")
+		verifyEq(docType.publicId, "-//W3C//DTD XHTML 1.0 Strict//EN")
+		verifyEq(docType.systemId, `http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd`)
+		
+		docType = parser.parseDoc("<!DOCTYPE\n html\n PUBLIC\n 'publicId'\n 'systemId'\n> <html/>").doc.docType
+		verifyEq(docType.rootElem, "html")
+		verifyEq(docType.publicId, "publicId")
+		verifyEq(docType.systemId, `systemId`)
+		
+		docType = parser.parseDoc("<!DOCTYPE\t html\n PUBLIC\f 'publicId'\r 'systemId' > <html/>").doc.docType
+		verifyEq(docType.rootElem, "html")
+		verifyEq(docType.publicId, "publicId")
+		verifyEq(docType.systemId, `systemId`)
+	}
 }
