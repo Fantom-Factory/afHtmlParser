@@ -36,8 +36,8 @@ attributes			= (&[^/>] ([ \t]+ / attr:doubleQuoteAttr / attr:singleQuoteAttr / a
 attrName			= [^ \t\n\r\f"'>/=]+
 emptyAttr			= attrName+
 unquotedAttr		= attrName [ \t]* "=" [ \t]* attrValue:(text:[^ \t\n\r\f"'=<>`&]+ / charRef)+
-singleQuoteAttr		= attrName [ \t]* "=" [ \t]* "'" attrValue:(text:[^'&]+ / charRef)* "'"
-doubleQuoteAttr		= attrName [ \t]* "=" [ \t]* "\"" attrValue:(text:[^"&]+ / charRef)* "\""
+singleQuoteAttr		= attrName [ \t]* "=" [ \t]* "'"  attrValue:(text:[^'&>]+ / charRef / (">" \err(Bad attr quote)))* "'"
+doubleQuoteAttr		= attrName [ \t]* "=" [ \t]* "\"" attrValue:(text:[^"&>]+ / charRef / (">" \err(Bad attr quote)))* "\""
 
 // ---- Character References ----
 

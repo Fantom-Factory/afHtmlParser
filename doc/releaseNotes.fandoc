@@ -1,46 +1,50 @@
-v0.2
+v0.2 [#v0.2]
 ****
-v0.2.8
+v0.2.10 [#v0.2.10]
+=======
+ - Chg: Parser now errors should an attribute forget to define a closing quote.
+
+v0.2.8 [#v0.2.8]
 ======
  - Bug: Could not parse DOCTYPEs with new line chars.
 
-v0.2.6
+v0.2.6 [#v0.2.6]
 ======
  - Bug: New lines after DOCTYPEs could not be parsed.
 
-v0.2.4
+v0.2.4 [#v0.2.4]
 ======
  - Bug: Attributes on Void tags were being added to their parent elements. Thanks go to Big Top Games for reporting.
 
-v0.2.2
+v0.2.2 [#v0.2.2]
 ======
  - New: Can parse HTML with missed end-tags for '<p>', '<tr>', & '<td>'.
  - Chg: Updated to [Pegger 1.1]`pod:afPegger`.
 
-v0.2.0
+v0.2.0 [#v0.2.0]
 ======
  - Chg: Re-written with [Pegger 1.0]`pod:afPegger`.
 
 
 
-v0.1
+v0.1 [#v0.1]
 ****
-v0.1.2
+v0.1.2 [#v0.1.2]
 ======
  - Chg: More lenient doctype parsing.
  - Chg: Single non-char ref '&' are parsed as is.
 
-v0.1.0
+v0.1.0 [#v0.1.0]
 ======
  - New: Now available in Javascript!
  - Chg: Removed dependency on 'concurrent'.
  - Chg: Updated to [Pegger 0.1.0]`pod:afPegger`.
 
-v0.0.4
+v0.0.4 [#v0.0.4]
 ======
  - Chg: Locked down the version of [Pegger]`pod:afPegger`.
 
-v0.0.2
+v0.0.2 [#v0.0.2]
 ======
  - New: Preview release.
 
