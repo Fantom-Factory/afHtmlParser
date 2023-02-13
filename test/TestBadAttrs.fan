@@ -9,7 +9,15 @@ internal class TestBadAttrs : HtmlParserTest {
 		}		
 
 		verifyErrMsg(PegParseErr#, "Bad attr quote") {
+			parser.parseDoc("""<form action="/login/login" method="post<div></div>""")
+		}		
+
+		verifyErrMsg(PegParseErr#, "Bad attr quote") {
 			parser.parseDoc("""<form action="/login/login" method='post>""")
+		}		
+
+		verifyErrMsg(PegParseErr#, "Bad attr quote") {
+			parser.parseDoc("""<form action="/login/login" method='post<div></div>""")
 		}
 	}
 }
