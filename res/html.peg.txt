@@ -1,5 +1,6 @@
 
 // PEG Rules for parsing well formed HTML 5 documents 
+// https://html.spec.whatwg.org/multipage/syntax.html
 
 html				= bom? blurb* doctype? blurb* xmlProlog? blurb* elem blurb*
 bom					= "\uFEFF"
@@ -8,18 +9,18 @@ xmlProlog			= "<?xml" (!"?>" .)+ "?>"
 // ---- Doctype ----
 
 doctype				= "<!DOCTYPE" [ \t\n\f\r]+ doctypeElem:[a-zA-Z0-9]+ (doctypePublicId / doctypeSystemId)* [ \t\n\f\r]* ">"
-doctypePublicId		= [ \t\n\f\r]+ "PUBLIC" [ \t\n\f\r]+ (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
+doctypePublicId		= [ \t\n\f\r]+  "PUBLIC" [ \t\n\f\r]+   (("\"" publicId:[^"]* "\"") / ("'" publicId:[^']* "'"))
 doctypeSystemId		= [ \t\n\f\r]+ ("SYSTEM" [ \t\n\f\r]+)? (("\"" systemId:[^"]* "\"") / ("'" systemId:[^']* "'"))
 
 // ---- Elems ----
 
 elem				= voidElem / rawTextElem / escRawTextElem / selfClosingElem / normalElem
-voidElem			= "<"  voidTag:voidElemName attributes ">"
-rawTextElem			= "<" startTag:rawTextElemName attributes ">" rawTextContent endElem
-escRawTextElem		= "<" startTag:escRawTextElemName attributes ">" escRawTextContent endElem
-selfClosingElem		= "<"  voidTag:elemName attributes "/>"
-normalElem			= "<" startTag:elemName attributes ">" normalContent? endElem?
-endElem				= "</"  endTag:elemName ">"
+voidElem			= "<"  voidTag:voidElemName       attributes  ">"
+rawTextElem			= "<" startTag:rawTextElemName    attributes  ">" rawTextContent endElem
+escRawTextElem		= "<" startTag:escRawTextElemName attributes  ">" escRawTextContent endElem
+selfClosingElem		= "<"  voidTag:elemName           attributes "/>"
+normalElem			= "<" startTag:elemName           attributes  ">" normalContent? endElem?
+endElem				= "</"  endTag:elemName                       ">"
 
 elemName			= [a-zA-Z] [^\t\n\f />]*
 voidElemName		= "area" / "base" / "br" / "col" / "embed" / "hr" / "img" / "input" / "keygen" / "link" / "meta" / "param" / "source" / "track" / "wbr"
@@ -35,17 +36,17 @@ normalContent		= !"</" (tagText:(text:[^<&]+ / charRef) / comment / cdata / elem
 attributes			= (&[^/>] ([ \t]+ / attr:doubleQuoteAttr / attr:singleQuoteAttr / attr:unquotedAttr / emptyAttr))*
 attrName			= [^ \t\n\r\f"'>/=]+
 emptyAttr			= attrName+
-unquotedAttr		= attrName [ \t]* "=" [ \t]* attrValue:(text:[^ \t\n\r\f"'=<>`&]+ / charRef)+
-singleQuoteAttr		= attrName [ \t]* "=" [ \t]* "'"  attrValue:(text:[^'&<>]+ / charRef / ([<>] \err(Bad attr quote)))* "'"
-doubleQuoteAttr		= attrName [ \t]* "=" [ \t]* "\"" attrValue:(text:[^"&<>]+ / charRef / ([<>] \err(Bad attr quote)))* "\""
+unquotedAttr		= attrName [ \t]* "=" [ \t]*      attrValue:(charRef / text:[^ \t\n\r\f"'=<>`&]+)+
+singleQuoteAttr		= attrName [ \t]* "=" [ \t]* "'"  attrValue:(charRef / text:[^'&]+)* "'"
+doubleQuoteAttr		= attrName [ \t]* "=" [ \t]* "\"" attrValue:(charRef / text:[^"&]+)* "\""
 
 // ---- Character References ----
 
 charRef				= &"&" (decNumCharRef / hexNumCharRef / namedCharRef / borkedRef)
-namedCharRef		= "&" [^;>]+ ";"
-decNumCharRef		= "&#" [0-9]+ ";"
+namedCharRef		= "&"   [^;>]+ ";"
+decNumCharRef		= "&#"  [0-9]+ ";"
 hexNumCharRef		= "&#x" [a-fA-F0-9]+ ";"
-borkedRef			= "&" &[ \t]
+borkedRef			= "&"  &[ \t]
 
 // ---- Misc ----
 
